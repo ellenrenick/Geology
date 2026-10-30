@@ -27,5 +27,8 @@ Put new or changed content in the sandbox (178045) first. Copy it to the live co
 | Lab | Folder | Handout |
 | --- | --- | --- |
 | Weathering and Erosion | `labs/weathering-erosion/` | https://claude.ai/artifact/9yHMh3Dur8VpWsqpDyUraJ |
+| Metamorphic Rock Key (Ward's 45 E 3120, specimens 25-36) | `labs/metamorphic-rock-id/` | None (the page prints as a 2-page landscape chart + specimen table) |
 
 Published simulation: https://claude.ai/artifact/JhEJjtcs4WPcDRfP6qJUPZ
+
+Published metamorphic rock key: https://claude.ai/artifact/3nD1g3dYs9xT5yQVmtWdv4

@@ -1,0 +1,353 @@
+<title>Metamorphic Rock Key</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: header, guided key (one question at a time), full flowchart (SVG, one landscape page when printed), specimen table, test notes. Same palette as the weathering lab. */
+:root{
+  --bg:#f1f4f2; --surface:#ffffff; --ink:#18241f; --muted:#56665f; --line:#d2dad5; --line-strong:#8b9a93;
+  --accent:#1c6a72; --accent-ink:#ffffff; --soft:#e7efec; --rock:#e3ecef; --spec:#f6efe3; --spec-line:#b9a47c;
+  --font-display:'Familjen Grotesk','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Source Sans 3','Segoe UI',Arial,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#17211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3a35; --line-strong:#6f827a;
+  --accent:#55b6c0; --accent-ink:#04201f; --soft:#1e2d29; --rock:#1b2c33; --spec:#2b2619; --spec-line:#7d6d47; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#17211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3a35; --line-strong:#6f827a;
+  --accent:#55b6c0; --accent-ink:#04201f; --soft:#1e2d29; --rock:#1b2c33; --spec:#2b2619; --spec-line:#7d6d47; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--font-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+header.top{padding-block:22px 0}
+.kicker{font:500 12px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;margin-top:4px}
+h2{font-size:clamp(21px,3.2vw,26px);font-weight:600}
+.lede{max-width:68ch;color:var(--muted);margin:10px 0 0}
+section{display:flex;flex-direction:column;gap:14px;min-width:0}
+.sec-head{display:flex;flex-direction:column;gap:4px}
+.sec-head p{margin:0;color:var(--muted);max-width:68ch}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* guided key */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.crumbs li{font:500 12px var(--font-mono);background:var(--soft);color:var(--muted);padding:3px 8px;border-radius:3px}
+.eyebrow{font:500 12px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.q h3{font-size:clamp(22px,3.4vw,28px);margin-top:4px}
+.q h3:focus{outline:none}
+.how{margin:8px 0 0;max-width:66ch;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px}
+.opt{font:600 16px/1.3 var(--font-body);text-align:left;padding:12px 14px;border:1px solid var(--line-strong);border-radius:4px;background:var(--bg);color:var(--ink);cursor:pointer;min-height:56px}
+.opt:hover{border-color:var(--accent);background:var(--soft)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:600 15px var(--font-display);padding:9px 14px;border-radius:4px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.btn.alt{background:none;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.result{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 18px;align-items:start}
+.result .big{font:600 clamp(44px,9vw,72px)/1 var(--font-mono);color:var(--accent)}
+.result h3{font-size:clamp(24px,4vw,32px)}
+dl.facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 16px;margin:6px 0 0}
+dl.facts dt{font:500 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+dl.facts dd{margin:0}
+@media (max-width:560px){.result{grid-template-columns:minmax(0,1fr)}dl.facts{grid-template-columns:minmax(0,1fr);gap:0}dl.facts dd{margin-bottom:8px}}
+
+/* chart */
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px}
+.chart-title{display:none}
+svg.key{display:block;min-width:900px;width:100%;height:auto}
+svg.key text{font-family:var(--font-body);font-size:9.5px;fill:var(--ink)}
+svg.key .ed{fill:none;stroke:var(--line-strong);stroke-width:1.1}
+svg.key .arrow{fill:var(--line-strong)}
+svg.key .elab{fill:var(--muted);font-size:9px;font-weight:600}
+svg.key .nq{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.1}
+svg.key .nr{fill:var(--rock);stroke:var(--accent);stroke-width:1.3}
+svg.key .ns{fill:var(--spec);stroke:var(--spec-line);stroke-width:1.1}
+svg.key .rn{font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:.04em}
+svg.key .rd{fill:var(--muted)}
+svg.key .num{font-family:var(--font-mono);font-weight:600;font-size:12px;fill:var(--accent)}
+svg.key .nm{font-family:var(--font-display);font-weight:600;font-size:11.5px}
+svg.key .start{font:600 8.5px var(--font-mono);letter-spacing:.1em;fill:var(--accent)}
+svg.key .fh{font-family:var(--font-display);font-weight:600;font-size:10.5px}
+svg.key .fr{stroke:var(--line);stroke-width:1}
+
+/* table */
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font:500 11px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--soft);position:sticky;top:0}
+td.n{font:600 15px var(--font-mono);color:var(--accent);font-variant-numeric:tabular-nums}
+td.r{font-family:var(--font-display);font-weight:600;font-size:15px}
+
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:14px}
+.tests .panel{gap:6px}
+.tests p{margin:0;color:var(--muted)}
+.tests b{color:var(--ink)}
+
+@media print{
+  :root:root:root{--bg:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#ccc;--line-strong:#666;--accent:#14535a;--soft:#eef2f0;--rock:#e3ecef;--spec:#f6efe3;--spec-line:#9c875e;color-scheme:light}
+  @page{size:letter landscape;margin:.35in}
+  body{padding:0;font-size:11px}
+  header.top,#guide,#tests,.lede{display:none}
+  .wrap{gap:0}
+  #chart{break-after:page}
+  .chart-title{display:block;margin-bottom:4px}
+  .chart-title h1{font-size:20px;margin:0}
+  .chart-title p{margin:0;font-size:11px;color:var(--muted)}
+  .scroll{border:0;padding:0;overflow:visible}
+  svg.key{min-width:0;max-height:7in}
+  .sec-head{display:none}
+  table{min-width:0;font-size:10.5px}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">Honors Geology · Rock and Mineral ID</div>
+    <h1>Metamorphic Rock Key</h1>
+    <p class="lede">Work through the questions with a specimen in hand. The key ends at one of the 12 rocks in the Ward's Metamorphic Rock Collection (45 E 3120), specimens 25 to 36. The full chart is further down for printing.</p>
+  </header>
+
+  <section id="guide" aria-labelledby="guide-h">
+    <div class="sec-head"><h2 id="guide-h">Guided key</h2></div>
+    <div class="panel" id="guide-panel" aria-live="polite"></div>
+  </section>
+
+  <section id="chart" aria-labelledby="chart-h">
+    <div class="chart-title">
+      <h1>Metamorphic Rock Identification Key</h1>
+      <p>Ward's Metamorphic Rock Collection 45 E 3120, specimens 25 to 36. Start at the left box and follow the answers to your specimen.</p>
+    </div>
+    <div class="sec-head">
+      <h2 id="chart-h">Full chart</h2>
+      <p>Start at the left. Each answer leads to the next test until you reach a numbered specimen. Print this page from your browser (landscape, one sheet).</p>
+    </div>
+    <div class="scroll"><svg class="key" id="key-svg" viewBox="0 0 1100 790" role="img" aria-label="Flowchart for identifying the twelve metamorphic rock specimens"></svg></div>
+  </section>
+
+  <section id="table-sec" aria-labelledby="table-h">
+    <div class="sec-head">
+      <h2 id="table-h">The twelve specimens</h2>
+      <p>Use this to check your answer. Parent rock (protolith) and metamorphic setting are the interpretation half of each identification.</p>
+    </div>
+    <div class="scroll"><table id="spec-table">
+      <thead><tr><th>#</th><th>Rock</th><th>Texture</th><th>How to confirm</th><th>Parent rock</th><th>Setting and grade</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section id="tests" aria-labelledby="tests-h">
+    <div class="sec-head"><h2 id="tests-h">Tests used in the key</h2></div>
+    <div class="tests">
+      <div class="panel"><h3>Foliation</h3><p>Rotate the specimen under a light. <b>Foliated</b> rocks have flaky minerals lined up or light and dark mineral bands, so they look streaked or split in one direction. <b>Nonfoliated</b> rocks are massive, with equal-sized crystals that interlock.</p></div>
+      <div class="panel"><h3>Acid test</h3><p>Use one drop of dilute (about 5 to 10%) HCl on a fresh surface, with goggles on. Calcite marble fizzes at once. Dolomitic marble reacts weakly until you scratch a little powder from the surface.</p></div>
+      <div class="panel"><h3>Hardness (Mohs)</h3><p>Fingernail 2.5, copper coin about 3.5, steel nail and glass about 5.5, quartz 7. Try to scratch the glass plate with the specimen. If it leaves a scratch on the glass, the specimen is harder than 5.5.</p></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Specimen data for the Ward's collection. chart = lines shown in the flowchart box. */
+const SP = {
+  25:{name:'Biotite gneiss', chart:['Dark biotite streaks in coarse','bands; crushed granite'], tex:'Foliated, banded, coarse',
+      id:'Coarse bands of quartz and feldspar with dark biotite flakes concentrated in streaks.',
+      proto:'Granite (an orthogneiss)', set:'High grade, regional (upper amphibolite facies)'},
+  26:{name:'Granitoid gneiss', chart:['Light and granite-like, coarse;','weak to moderate banding'], tex:'Foliated, banded, coarse',
+      id:'Quartz, feldspar and a few dark minerals. Looks like granite with a rough banding or alignment.',
+      proto:'Granite (an orthogneiss)', set:'High grade, regional (upper amphibolite facies)'},
+  27:{name:'Schist', chart:['Glistening light and dark mica','or chlorite flakes'], tex:'Foliated, medium to coarse',
+      id:'Visible mica flakes (muscovite, biotite) or green chlorite give a glittery sheen and a flaky, wavy parting.',
+      proto:'Shale or mudstone, after passing through slate and phyllite', set:'Low to moderate grade, regional (chlorite to mica schist)'},
+  28:{name:'Garnetiferous mica schist', chart:['Mica schist with numerous','garnet crystals'], tex:'Foliated, medium to coarse',
+      id:'Mica schist with dark red, roughly equant garnet crystals standing out of the foliation.',
+      proto:'Shale or mudstone', set:'Moderate grade, regional. Garnet is an index mineral'},
+  29:{name:'Hornblende schist', chart:['Dark rock; hornblende grew','from mafic igneous minerals'], tex:'Foliated, medium to coarse',
+      id:'Dark green to black, with elongate hornblende (amphibole) crystals aligned in the foliation.',
+      proto:'Mafic igneous rock such as basalt or gabbro', set:'Moderate to high grade, regional (amphibolite facies)'},
+  30:{name:'Quartzite', chart:['Fused quartz grains; hard to','see the original sand'], tex:'Nonfoliated, fine to coarse',
+      id:'Scratches glass (H = 7), no acid reaction, breaks across grains with a glassy, sugary surface.',
+      proto:'Quartz sandstone (quartz arenite)', set:'Regional or contact; variable grade'},
+  31:{name:'Red slate', chart:['Hard, compact, splits into flat','pieces; red-brown'], tex:'Foliated, very fine',
+      id:'Dull, smooth, rings when struck, splits along slaty cleavage. Hematite gives the red color.',
+      proto:'Red shale or clay', set:'Low grade, regional'},
+  32:{name:'Gray slate', chart:['Splits into flat pieces; gray','to black from carbon'], tex:'Foliated, very fine',
+      id:'Dull, smooth, splits along slaty cleavage. Organic matter from the protolith darkens it.',
+      proto:'Black mud or shale rich in organic matter', set:'Low grade, regional'},
+  33:{name:'White marble', chart:['White, sugary crystals;','fizzes in dilute HCl'], tex:'Nonfoliated, medium to coarse',
+      id:'Interlocking calcite crystals, H = 3 (scratched by a steel nail), fizzes in dilute HCl.',
+      proto:'Limestone', set:'Contact or regional; variable grade'},
+  34:{name:'Pink marble', chart:['Pink from impurities; fizzes if','calcitic (powder if dolomitic)'], tex:'Nonfoliated, medium to coarse',
+      id:'Interlocking carbonate crystals, H = 3 to 4. A calcite marble fizzes on the surface; a dolomitic one needs powder.',
+      proto:'Limestone (or dolostone) with impurities', set:'Contact or regional; variable grade'},
+  35:{name:'Serpentinite', chart:['Dark green, waxy or greasy;','no acid reaction'], tex:'Nonfoliated, fine',
+      id:'Green to nearly black, waxy or greasy luster, harder than a fingernail but softer than glass.',
+      proto:'Peridotite (ultramafic rock)', set:'Low grade; water converts olivine and pyroxene to serpentine'},
+  36:{name:'Soapstone', chart:['Soft and slippery; mostly talc;','fingernail scratches it'], tex:'Nonfoliated (may be weakly foliated)',
+      id:'Soapy feel, H = 1 to 2, scratched by a fingernail. Composed largely of talc.',
+      proto:'Ultramafic rock altered by magnesium-rich fluids', set:'Low to moderate grade'}
+};
+const spec = n => ({kind:'spec', num:n});
+
+/* Decision tree. lines = chart text; q/how = guided key text; each kid has label (chart) and opt (button). */
+const QN = {kind:'q', depth:3, lines:['Does a fingernail','scratch it? Is the feel','soapy and slippery?'],
+  q:'Does your fingernail scratch it?', how:'Fingernail hardness is about 2.5. Rub the surface. Soapstone feels slippery or soapy; serpentinite feels waxy or greasy.',
+  kids:[{label:['Yes'], opt:'Yes. Soft, with a soapy, slippery feel.', node:spec(36)},
+        {label:['No: harder,','waxy green'], opt:'No. Harder, with a waxy or greasy green surface.', node:spec(35)}]};
+const QG = {kind:'q', depth:2, lines:['Does it scratch glass','(H greater than 5.5)?'],
+  q:'Does it scratch a glass plate?', how:'Press a sharp corner of the specimen against the glass and drag it. A scratch you can feel, which does not wipe off, means harder than 5.5.',
+  kids:[{label:['Yes'], opt:'Yes. It scratches the glass.', node:spec(30)},
+        {label:['No'], opt:'No. The glass is not scratched.', node:QN}]};
+const MARBLE = {kind:'rock', depth:2, lines:['MARBLE','Calcite crystals, H = 3'],
+  q:'What color is it?', how:'Marble is metamorphosed limestone. Its color comes from impurities in the original rock.',
+  kids:[{label:['White,','sugary'], opt:'White with a sugary texture', node:spec(33)},
+        {label:['Pink'], opt:'Pink', node:spec(34)}]};
+const QA = {kind:'q', depth:1, lines:['Put one drop of dilute','HCl on a fresh surface.','Does it fizz?'],
+  q:'Does it fizz in dilute HCl?', how:'Wear goggles and use one drop on a fresh surface. If the rock looks slippery or weakly foliated, it is still on this branch; keep going with the hardness tests.',
+  kids:[{label:['Yes: fizzes'], opt:'Yes. It fizzes.', node:MARBLE},
+        {label:['No reaction'], opt:'No. There is no reaction.', node:QG}]};
+const GNEISS = {kind:'rock', depth:3, lines:['GNEISS','Coarse, banded'],
+  q:'Which description fits better?', how:'Both gneisses in the collection formed from granite. Biotite gneiss shows stronger dark streaks. Granitoid gneiss is lighter and still looks much like granite.',
+  kids:[{label:['Dark biotite','streaks, strong','banding'], opt:'Dark biotite streaks and strong banding', node:spec(25)},
+        {label:['Light, granite-','like, coarse'], opt:'Light and granite-like, with weaker banding', node:spec(26)}]};
+const SCHIST = {kind:'rock', depth:3, lines:['SCHIST','Visible mica flakes'],
+  q:'What stands out besides mica?', how:'Schists are named for their extra minerals. Look for equant red garnets or long dark needles of hornblende.',
+  kids:[{label:['Only silvery','mica or chlorite'], opt:'Only silvery mica or green chlorite', node:spec(27)},
+        {label:['Garnet','crystals'], opt:'Numerous garnet crystals', node:spec(28)},
+        {label:['Dark rock,','hornblende'], opt:'A dark rock with black-green hornblende', node:spec(29)}]};
+const Q2 = {kind:'q', depth:2, lines:['Are light and dark','minerals separated','into distinct bands?'],
+  q:'Are light and dark minerals separated into bands?', how:'Banding means separate layers of light minerals (quartz, feldspar) and dark minerals (biotite, amphibole), usually thicker than a millimeter. Schist instead has flaky mica that gives a glittery sheen.',
+  kids:[{label:['Yes: banded'], opt:'Yes. Distinct light and dark bands.', node:GNEISS},
+        {label:['No: glittery,','flaky sheen'], opt:'No. Glittery, flaky sheen from mica or similar minerals.', node:SCHIST}]};
+const SLATE = {kind:'rock', depth:2, lines:['SLATE','Splits along flat','cleavage planes'],
+  q:'What color is it?', how:'Color records the original shale. Hematite (iron oxide) gives red. Fine organic carbon gives gray to black.',
+  kids:[{label:['Red-brown'], opt:'Red-brown', node:spec(31)},
+        {label:['Gray to','black'], opt:'Gray to black', node:spec(32)}]};
+const QF = {kind:'q', depth:1, lines:['Can you see individual','mineral grains with','a hand lens?'],
+  q:'Can you see individual mineral grains?', how:'Use a hand lens. Slate looks dull and smooth, and it splits into flat sheets. If you see sparkling flakes or distinct crystals, answer yes.',
+  kids:[{label:['No: grains','too fine'], opt:'No. Dull and smooth, splits into flat sheets.', node:SLATE},
+        {label:['Yes'], opt:'Yes. Grains are visible; it looks sparkly or banded.', node:Q2}]};
+const ROOT = {kind:'q', depth:0, lines:['Look for foliation.','Are minerals aligned,','flaky, or in bands?'],
+  q:'Is the rock foliated?', how:'Rotate the specimen under a light. Foliated rocks have flaky minerals lined up or light and dark bands, so they look streaked or split in one direction. Nonfoliated rocks are massive, with crystals that interlock.',
+  kids:[{label:['Foliated'], opt:'Foliated. Aligned, flaky or banded.', node:QF},
+        {label:['Nonfoliated'], opt:'Nonfoliated. Massive, interlocking crystals.', node:QA}]};
+
+/* ---------- guided key ---------- */
+const panel = document.getElementById('guide-panel');
+let path = [];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function renderGuide(focus){
+  const cur = path.length ? path[path.length-1].kid.node : ROOT;
+  const crumbs = path.map(p => `<li>${esc(p.kid.label.join(' ').replace(/- /g,'').replace(/-\s/g,'-'))}</li>`).join('');
+  let html = crumbs ? `<ul class="crumbs" aria-label="Your answers so far">${crumbs}</ul>` : '';
+  if(cur.kind === 'spec'){
+    const s = SP[cur.num];
+    html += `<div class="result"><div class="big" aria-hidden="true">${cur.num}</div><div>
+      <div class="eyebrow">Your specimen is number ${cur.num}</div>
+      <h3 id="focus-h" tabindex="-1">${esc(s.name)}</h3></div></div>
+      <dl class="facts">
+        <dt>Texture</dt><dd>${esc(s.tex)}</dd>
+        <dt>Confirm</dt><dd>${esc(s.id)}</dd>
+        <dt>Parent rock</dt><dd>${esc(s.proto)}</dd>
+        <dt>Setting</dt><dd>${esc(s.set)}</dd>
+      </dl>
+      <div class="btns"><button class="btn" id="b-restart">Identify another rock</button><button class="btn alt" id="b-back">Back one step</button></div>`;
+  } else {
+    const n = path.length + 1;
+    html += `<div class="q"><div class="eyebrow">${cur.kind==='rock' ? 'Narrowing it down' : 'Question '+n}</div>
+      <h3 id="focus-h" tabindex="-1">${esc(cur.q)}</h3><p class="how">${esc(cur.how)}</p></div>
+      <div class="opts">${cur.kids.map((k,i)=>`<button class="opt" data-i="${i}">${esc(k.opt)}</button>`).join('')}</div>
+      <div class="btns"><button class="btn alt" id="b-back" ${path.length?'':'disabled'}>Back</button>
+      <button class="btn alt" id="b-restart" ${path.length?'':'disabled'}>Start over</button></div>`;
+  }
+  panel.innerHTML = html;
+  panel.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    path.push({kid: cur.kids[+b.dataset.i]}); renderGuide(true);
+  }));
+  const back = document.getElementById('b-back'), re = document.getElementById('b-restart');
+  if(back) back.addEventListener('click', () => { path.pop(); renderGuide(true); });
+  if(re) re.addEventListener('click', () => { path = []; renderGuide(true); });
+  if(focus){ const h = document.getElementById('focus-h'); if(h) h.focus({preventScroll:true}); }
+}
+renderGuide(false);
+
+/* ---------- table ---------- */
+document.querySelector('#spec-table tbody').innerHTML = Object.keys(SP).map(k => {
+  const s = SP[k];
+  return `<tr><td class="n">${k}</td><td class="r">${esc(s.name)}</td><td>${esc(s.tex)}</td><td>${esc(s.id)}</td><td>${esc(s.proto)}</td><td>${esc(s.set)}</td></tr>`;
+}).join('');
+
+/* ---------- flowchart ---------- */
+(function(){
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('key-svg');
+  const ROW = 54, TOP = 8, LH = 11.5, GAPX = 14;
+  const X = [12, 232, 462, 692], W = [122, 138, 138, 112], LX = 896, LW = 192;
+  let rows = 0;
+  const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for(const k in attrs) e.setAttribute(k, attrs[k]); (parent||svg).appendChild(e); return e; };
+
+  function walk(n){
+    if(n.kind === 'spec'){ const s = SP[n.num]; n.lines = [null].concat(s.chart); n.row = rows++; return; }
+    n.kids.forEach(k => walk(k.node));
+  }
+  function place(n){
+    if(n.kind === 'spec'){ n.y = TOP + n.row*ROW + ROW/2; n.x = LX; n.w = LW; }
+    else { n.kids.forEach(k => place(k.node)); n.y = (n.kids[0].node.y + n.kids[n.kids.length-1].node.y)/2; n.x = X[n.depth]; n.w = W[n.depth]; }
+    n.h = n.lines.length*LH + 12;
+  }
+  walk(ROOT); place(ROOT);
+
+  const defs = el('defs', {});
+  const mk = el('marker', {id:'ah', viewBox:'0 0 8 8', refX:'7', refY:'4', markerWidth:'6', markerHeight:'6', orient:'auto'}, defs);
+  el('path', {d:'M0 0 L8 4 L0 8 z', class:'arrow'}, mk);
+
+  function edges(n){
+    if(n.kind === 'spec') return;
+    n.kids.forEach(k => {
+      const c = k.node, px = n.x + n.w, mid = px + GAPX;
+      el('path', {class:'ed', d:`M${px} ${n.y} H${mid} V${c.y} H${c.x - 1}`, 'marker-end':'url(#ah)'});
+      const t = el('text', {class:'elab', x:c.x - 9, y:c.y - 4 - (k.label.length-1)*LH, 'text-anchor':'end'});
+      k.label.forEach((ln, i) => { const ts = el('tspan', {x:c.x - 9, dy: i ? LH : 0}, t); ts.textContent = ln; });
+      edges(c);
+    });
+  }
+  function nodes(n){
+    const top = n.y - n.h/2;
+    const cls = n.kind === 'spec' ? 'ns' : n.kind === 'rock' ? 'nr' : 'nq';
+    el('rect', {class:cls, x:n.x, y:top, width:n.w, height:n.h, rx:3});
+    n.lines.forEach((ln, i) => {
+      const y = top + 6 + LH*(i + 0.85);
+      if(n.kind === 'spec' && i === 0){
+        const t = el('text', {x:n.x + 8, y:y + 1});
+        const a = el('tspan', {class:'num'}, t); a.textContent = n.num;
+        const b = el('tspan', {class:'nm', dx:7}, t); b.textContent = SP[n.num].name;
+      } else {
+        const t = el('text', {x:n.x + 8, y});
+        if(n.kind === 'rock' && i === 0) t.setAttribute('class', 'rn');
+        else if(n.kind === 'rock' || n.kind === 'spec') t.setAttribute('class', 'rd');
+        t.textContent = ln;
+      }
+    });
+    if(n.kind !== 'spec') n.kids.forEach(k => nodes(k.node));
+  }
+  edges(ROOT); nodes(ROOT);
+  const st = el('text', {class:'start', x:X[0], y:ROOT.y - ROOT.h/2 - 5}); st.textContent = 'START HERE';
+
+  /* footer notes */
+  const fy = TOP + 12*ROW + 20;
+  el('line', {class:'fr', x1:12, x2:1088, y1:fy - 8, y2:fy - 8});
+  const notes = [
+    ['Foliated rocks and metamorphic grade', ['Slate, phyllite, schist and gneiss form a sequence of increasing','temperature and pressure. Grains coarsen and minerals separate','into bands. Phyllite is not in this set: grains are still too fine to','see, but it has a satiny sheen and wavy surfaces.']],
+    ['Hardness benchmarks (Mohs)', ['Fingernail 2.5 · copper coin about 3.5 · steel nail and glass','about 5.5 · quartz 7.','Soapstone (talc) is 1. Marble (calcite) is 3. Quartzite is 7.']],
+    ['Acid test and parent rocks', ['One drop of dilute HCl, goggles on. Calcite marble fizzes; dolomitic','marble needs scratched powder first.','Parent rock: slate and schist from shale, gneiss from granite,','marble from limestone, quartzite from sandstone.']]
+  ];
+  [12, 380, 748].forEach((x, i) => {
+    const h = el('text', {class:'fh', x, y:fy + 8}); h.textContent = notes[i][0];
+    const t = el('text', {x, y:fy + 8 + 15, class:'rd'});
+    notes[i][1].forEach((ln, j) => { const ts = el('tspan', {x, dy: j ? LH : 0}, t); ts.textContent = ln; });
+  });
+})();
+</script>
