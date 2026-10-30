@@ -48,13 +48,12 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .btn{font:600 15px var(--font-display);padding:9px 14px;border-radius:4px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
 .btn.alt{background:none;color:var(--accent)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-.result{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 18px;align-items:start}
-.result .big{font:600 clamp(44px,9vw,72px)/1 var(--font-mono);color:var(--accent)}
+.result{display:block}
 .result h3{font-size:clamp(24px,4vw,32px)}
 dl.facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 16px;margin:6px 0 0}
 dl.facts dt{font:500 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
 dl.facts dd{margin:0}
-@media (max-width:560px){.result{grid-template-columns:minmax(0,1fr)}dl.facts{grid-template-columns:minmax(0,1fr);gap:0}dl.facts dd{margin-bottom:8px}}
+@media (max-width:560px){dl.facts{grid-template-columns:minmax(0,1fr);gap:0}dl.facts dd{margin-bottom:8px}}
 
 /* chart */
 .scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px}
@@ -75,13 +74,6 @@ svg.key .start{font:600 8.5px var(--font-mono);letter-spacing:.1em;fill:var(--ac
 svg.key .fh{font-family:var(--font-display);font-weight:600;font-size:10.5px}
 svg.key .fr{stroke:var(--line);stroke-width:1}
 
-/* table */
-table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
-th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
-th{font:500 11px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--soft);position:sticky;top:0}
-td.n{font:600 15px var(--font-mono);color:var(--accent);font-variant-numeric:tabular-nums}
-td.r{font-family:var(--font-display);font-weight:600;font-size:15px}
-
 .tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:14px}
 .tests .panel{gap:6px}
 .tests p{margin:0;color:var(--muted)}
@@ -93,22 +85,20 @@ td.r{font-family:var(--font-display);font-weight:600;font-size:15px}
   body{padding:0;font-size:11px}
   header.top,#guide,#tests,.lede{display:none}
   .wrap{gap:0}
-  #chart{break-after:page}
-  .chart-title{display:block;margin-bottom:4px}
+    .chart-title{display:block;margin-bottom:4px}
   .chart-title h1{font-size:20px;margin:0}
   .chart-title p{margin:0;font-size:11px;color:var(--muted)}
   .scroll{border:0;padding:0;overflow:visible}
   svg.key{min-width:0;max-height:7in}
   .sec-head{display:none}
-  table{min-width:0;font-size:10.5px}
-}
+  }
 </style>
 
 <div class="wrap">
   <header class="top">
     <div class="kicker">Honors Geology · Rock and Mineral ID</div>
     <h1>Metamorphic Rock Key</h1>
-    <p class="lede">Work through the questions with a specimen in hand. The key ends at one of the 12 rocks in the Ward's Metamorphic Rock Collection (45 E 3120), specimens 25 to 36. The full chart is further down for printing.</p>
+    <p class="lede">Work through the questions with a specimen in hand. The key ends at one of the 12 rocks in the Ward's Metamorphic Rock Collection (45 E 3120). The full chart is further down for printing.</p>
   </header>
 
   <section id="guide" aria-labelledby="guide-h">
@@ -119,24 +109,13 @@ td.r{font-family:var(--font-display);font-weight:600;font-size:15px}
   <section id="chart" aria-labelledby="chart-h">
     <div class="chart-title">
       <h1>Metamorphic Rock Identification Key</h1>
-      <p>Ward's Metamorphic Rock Collection 45 E 3120, specimens 25 to 36. Start at the left box and follow the answers to your specimen.</p>
+      <p>Ward's Metamorphic Rock Collection 45 E 3120. Start at the left box and follow the answers to your specimen.</p>
     </div>
     <div class="sec-head">
       <h2 id="chart-h">Full chart</h2>
-      <p>Start at the left. Each answer leads to the next test until you reach a numbered specimen. Print this page from your browser (landscape, one sheet).</p>
+      <p>Start at the left. Each answer leads to the next test until you reach a rock name. Print this page from your browser (landscape, one sheet).</p>
     </div>
     <div class="scroll"><svg class="key" id="key-svg" viewBox="0 0 1100 790" role="img" aria-label="Flowchart for identifying the twelve metamorphic rock specimens"></svg></div>
-  </section>
-
-  <section id="table-sec" aria-labelledby="table-h">
-    <div class="sec-head">
-      <h2 id="table-h">The twelve specimens</h2>
-      <p>Use this to check your answer. Parent rock (protolith) and metamorphic setting are the interpretation half of each identification.</p>
-    </div>
-    <div class="scroll"><table id="spec-table">
-      <thead><tr><th>#</th><th>Rock</th><th>Texture</th><th>How to confirm</th><th>Parent rock</th><th>Setting and grade</th></tr></thead>
-      <tbody></tbody>
-    </table></div>
   </section>
 
   <section id="tests" aria-labelledby="tests-h">
@@ -245,8 +224,8 @@ function renderGuide(focus){
   let html = crumbs ? `<ul class="crumbs" aria-label="Your answers so far">${crumbs}</ul>` : '';
   if(cur.kind === 'spec'){
     const s = SP[cur.num];
-    html += `<div class="result"><div class="big" aria-hidden="true">${cur.num}</div><div>
-      <div class="eyebrow">Your specimen is number ${cur.num}</div>
+    html += `<div class="result"><div>
+      <div class="eyebrow">Your specimen is</div>
       <h3 id="focus-h" tabindex="-1">${esc(s.name)}</h3></div></div>
       <dl class="facts">
         <dt>Texture</dt><dd>${esc(s.tex)}</dd>
@@ -273,12 +252,6 @@ function renderGuide(focus){
   if(focus){ const h = document.getElementById('focus-h'); if(h) h.focus({preventScroll:true}); }
 }
 renderGuide(false);
-
-/* ---------- table ---------- */
-document.querySelector('#spec-table tbody').innerHTML = Object.keys(SP).map(k => {
-  const s = SP[k];
-  return `<tr><td class="n">${k}</td><td class="r">${esc(s.name)}</td><td>${esc(s.tex)}</td><td>${esc(s.id)}</td><td>${esc(s.proto)}</td><td>${esc(s.set)}</td></tr>`;
-}).join('');
 
 /* ---------- flowchart ---------- */
 (function(){
@@ -322,8 +295,7 @@ document.querySelector('#spec-table tbody').innerHTML = Object.keys(SP).map(k =>
       const y = top + 6 + LH*(i + 0.85);
       if(n.kind === 'spec' && i === 0){
         const t = el('text', {x:n.x + 8, y:y + 1});
-        const a = el('tspan', {class:'num'}, t); a.textContent = n.num;
-        const b = el('tspan', {class:'nm', dx:7}, t); b.textContent = SP[n.num].name;
+        const b = el('tspan', {class:'nm'}, t); b.textContent = SP[n.num].name;
       } else {
         const t = el('text', {x:n.x + 8, y});
         if(n.kind === 'rock' && i === 0) t.setAttribute('class', 'rn');
