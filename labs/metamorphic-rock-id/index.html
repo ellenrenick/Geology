@@ -134,9 +134,9 @@ const SP = {
   25:{name:'Biotite gneiss', chart:['Dark biotite streaks in coarse','bands; crushed granite'], tex:'Foliated, banded, coarse',
       id:'Coarse bands of quartz and feldspar with dark biotite flakes concentrated in streaks.',
       proto:'Granite (an orthogneiss)', set:'High grade, regional (upper amphibolite facies)'},
-  26:{name:'Granitoid gneiss', chart:['Light and granite-like, coarse;','weak to moderate banding'], tex:'Foliated, banded, coarse',
-      id:'Quartz, feldspar and a few dark minerals. Looks like granite with a rough banding or alignment.',
-      proto:'Granite (an orthogneiss)', set:'High grade, regional (upper amphibolite facies)'},
+  26:{name:'Granitoid gneiss', chart:['Coarse interlocking quartz,','feldspar, dark specks; granite-like'], tex:'Nonfoliated, coarse',
+      id:'Quartz, feldspar and a few dark minerals locked together like granite, with little or no banding. Scratches glass; no acid reaction.',
+      proto:'Granite (an orthogneiss)', set:'High grade, regional (upper amphibolite facies); foliation weak or absent'},
   27:{name:'Schist', chart:['Glistening light and dark mica','or chlorite flakes'], tex:'Foliated, medium to coarse',
       id:'Visible mica flakes (muscovite, biotite) or green chlorite give a glittery sheen and a flaky, wavy parting.',
       proto:'Shale or mudstone, after passing through slate and phyllite', set:'Low to moderate grade, regional (chlorite to mica schist)'},
@@ -175,9 +175,13 @@ const QN = {kind:'q', depth:3, lines:['Does a fingernail','scratch it? Is the fe
   q:'Does your fingernail scratch it?', how:'Fingernail hardness is about 2.5. Rub the surface. Soapstone feels slippery or soapy; serpentinite feels waxy or greasy.',
   kids:[{label:['Yes'], opt:'Yes. Soft, with a soapy, slippery feel.', node:spec(36)},
         {label:['No: harder,','waxy green'], opt:'No. Harder, with a waxy or greasy green surface.', node:spec(35)}]};
+const QS = {kind:'q', depth:3, lines:['Nearly all pale,','glassy quartz, or a','coarse granite-like','mix of minerals?'],
+  q:'What do the grains look like?', how:'Quartzite is almost entirely one pale, glassy mineral, fused into a dense, fine to medium-grained rock. Granitoid gneiss is coarse, with pink or white feldspar, glassy quartz and dark specks locked together like granite. Feldspar (H = 6) also scratches glass, so both rocks pass the glass test.',
+  kids:[{label:['Nearly all','quartz'], opt:'Nearly all pale, glassy quartz, fused together', node:spec(30)},
+        {label:['Coarse granite-','like mix'], opt:'A coarse mix of pink or white feldspar, quartz and dark grains', node:spec(26)}]};
 const QG = {kind:'q', depth:2, lines:['Does it scratch glass','(H greater than 5.5)?'],
-  q:'Does it scratch a glass plate?', how:'Press a sharp corner of the specimen against the glass and drag it. A scratch you can feel, which does not wipe off, means harder than 5.5.',
-  kids:[{label:['Yes'], opt:'Yes. It scratches the glass.', node:spec(30)},
+  q:'Does it scratch a glass plate?', how:'Press a sharp corner of the specimen against the glass and drag it. A scratch you can feel, which does not wipe off, means harder than 5.5. Quartz and feldspar both qualify.',
+  kids:[{label:['Yes'], opt:'Yes. It scratches the glass.', node:QS},
         {label:['No'], opt:'No. The glass is not scratched.', node:QN}]};
 const MARBLE = {kind:'rock', depth:2, lines:['MARBLE','Calcite crystals, H = 3'],
   q:'What color is it?', how:'Marble is metamorphosed limestone. Its color comes from impurities in the original rock.',
@@ -187,10 +191,6 @@ const QA = {kind:'q', depth:1, lines:['Put one drop of dilute','HCl on a fresh s
   q:'Does it fizz in dilute HCl?', how:'Wear goggles and use one drop on a fresh surface. If the rock looks slippery or weakly foliated, it is still on this branch; keep going with the hardness tests.',
   kids:[{label:['Yes: fizzes'], opt:'Yes. It fizzes.', node:MARBLE},
         {label:['No reaction'], opt:'No. There is no reaction.', node:QG}]};
-const GNEISS = {kind:'rock', depth:3, lines:['GNEISS','Coarse, banded'],
-  q:'Which description fits better?', how:'Both gneisses in the collection formed from granite. Biotite gneiss shows stronger dark streaks. Granitoid gneiss is lighter and still looks much like granite.',
-  kids:[{label:['Dark biotite','streaks, strong','banding'], opt:'Dark biotite streaks and strong banding', node:spec(25)},
-        {label:['Light, granite-','like, coarse'], opt:'Light and granite-like, with weaker banding', node:spec(26)}]};
 const SCHIST = {kind:'rock', depth:3, lines:['SCHIST','Visible mica flakes'],
   q:'What stands out besides mica?', how:'Schists are named for their extra minerals. Look for equant red garnets or long dark needles of hornblende.',
   kids:[{label:['Only silvery','mica or chlorite'], opt:'Only silvery mica or green chlorite', node:spec(27)},
@@ -198,7 +198,7 @@ const SCHIST = {kind:'rock', depth:3, lines:['SCHIST','Visible mica flakes'],
         {label:['Dark rock,','hornblende'], opt:'A dark rock with black-green hornblende', node:spec(29)}]};
 const Q2 = {kind:'q', depth:2, lines:['Are light and dark','minerals separated','into distinct bands?'],
   q:'Are light and dark minerals separated into bands?', how:'Banding means separate layers of light minerals (quartz, feldspar) and dark minerals (biotite, amphibole), usually thicker than a millimeter. Schist instead has flaky mica that gives a glittery sheen.',
-  kids:[{label:['Yes: banded'], opt:'Yes. Distinct light and dark bands.', node:GNEISS},
+  kids:[{label:['Yes: banded'], opt:'Yes. Distinct light and dark bands.', node:spec(25)},
         {label:['No: glittery,','flaky sheen'], opt:'No. Glittery, flaky sheen from mica or similar minerals.', node:SCHIST}]};
 const SLATE = {kind:'rock', depth:2, lines:['SLATE','Splits along flat','cleavage planes'],
   q:'What color is it?', how:'Color records the original shale. Hematite (iron oxide) gives red. Fine organic carbon gives gray to black.',
