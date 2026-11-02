@@ -58,7 +58,7 @@ dl.facts dd{margin:0}
 /* chart */
 .scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px}
 .chart-title{display:none}
-svg.key{display:block;min-width:900px;width:100%;height:auto}
+svg.key{display:block;min-width:1100px;width:100%;height:auto}
 svg.key text{font-family:var(--font-body);font-size:9.5px;fill:var(--ink)}
 svg.key .ed{fill:none;stroke:var(--line-strong);stroke-width:1.1}
 svg.key .arrow{fill:var(--line-strong)}
@@ -70,6 +70,8 @@ svg.key .rn{font-family:var(--font-display);font-weight:700;font-size:12px;lette
 svg.key .rd{fill:var(--muted)}
 svg.key .num{font-family:var(--font-mono);font-weight:600;font-size:12px;fill:var(--accent)}
 svg.key .nm{font-family:var(--font-display);font-weight:600;font-size:11.5px}
+svg.key .ni{fill:var(--surface);stroke:var(--line-strong);stroke-width:1}
+svg.key .it{font-size:8.6px;fill:var(--ink)}
 svg.key .start{font:600 8.5px var(--font-mono);letter-spacing:.1em;fill:var(--accent)}
 svg.key .fh{font-family:var(--font-display);font-weight:600;font-size:10.5px}
 svg.key .fr{stroke:var(--line);stroke-width:1}
@@ -113,9 +115,9 @@ svg.key .fr{stroke:var(--line);stroke-width:1}
     </div>
     <div class="sec-head">
       <h2 id="chart-h">Full chart</h2>
-      <p>Start at the left. Each answer leads to the next test until you reach a rock name. Print this page from your browser (landscape, one sheet).</p>
+      <p>Start at the left. Each answer leads to the next test until you reach a rock name.</p>
     </div>
-    <div class="scroll"><svg class="key" id="key-svg" viewBox="0 0 1100 790" role="img" aria-label="Flowchart for identifying the twelve metamorphic rock specimens"></svg></div>
+    <div class="scroll"><svg class="key" id="key-svg" viewBox="0 0 1290 804" role="img" aria-label="Flowchart for identifying the twelve metamorphic rock specimens"></svg></div>
   </section>
 
   <section id="tests" aria-labelledby="tests-h">
@@ -168,6 +170,7 @@ const SP = {
       id:'Soapy feel, H = 1 to 2, scratched by a fingernail. Composed largely of talc.',
       proto:'Ultramafic rock altered by magnesium-rich fluids', set:'Low to moderate grade'}
 };
+const EXTRA = {"25": "Granite buried deep in a collision zone (about 600 °C or more); minerals segregate into bands. Gneiss from granite is an orthogneiss. Next step up: migmatite.", "26": "Same granite parent and deep-crust setting as biotite gneiss, but the minerals did not segregate into bands. Gneiss can be nonfoliated.", "27": "Mudstone heated further in a mountain belt (about 350 to 500 °C); mica grows large enough to see. Chlorite marks lower grade, muscovite and biotite higher.", "28": "Garnet grows at moderate temperature (about 450 to 550 °C and up) in the zone of regional metamorphism in a collision belt. An index mineral for grade.", "29": "Basalt or gabbro (ocean crust) caught in a mountain belt; recrystallizes at about 500 to 700 °C into amphibole plus feldspar (amphibolite facies).", "30": "Quartz sandstone recrystallized; quartz grains grow together so the rock breaks through grains, not around them. Forms near intrusions or in mountain belts.", "31": "Shale deposited in a basin is buried and squeezed at a convergent margin (about 200 to 300 °C). Red color: hematite (Fe³⁺) in an oxidized sediment.", "32": "Same setting as red slate. Carbon from buried organic matter, not oxidized, gives the dark gray to black color.", "33": "Limestone recrystallizes: calcite grains grow and interlock, destroying fossils and bedding. Forms around intrusions (contact aureoles) or in mountain belts.", "34": "Same origin as white marble. Pink color from iron or manganese impurities. If the parent was dolostone, the rock is dolomitic and reacts weakly to acid.", "35": "Mantle peridotite reacts with water at low temperature (below about 500 °C) at mid-ocean ridges and subduction zones: olivine becomes serpentine. Found in ophiolites.", "36": "Mg-rich ultramafic rock altered by hot, CO₂-bearing fluids; talc forms (about 300 to 500 °C). Soft and heat resistant, so used for carving and stoves."};
 const spec = n => ({kind:'spec', num:n});
 
 /* Decision tree. lines = chart text; q/how = guided key text; each kid has label (chart) and opt (button). */
@@ -257,8 +260,8 @@ renderGuide(false);
 (function(){
   const NS = 'http://www.w3.org/2000/svg';
   const svg = document.getElementById('key-svg');
-  const ROW = 54, TOP = 8, LH = 11.5, GAPX = 14;
-  const X = [12, 232, 462, 692], W = [122, 138, 138, 112], LX = 896, LW = 192;
+  const ROW = 54, TOP = 22, LH = 11.5, GAPX = 14;
+  const X = [10, 204, 410, 616], W = [116, 128, 128, 108], LX = 802, LW = 196, IX = 1006, IW = 272;
   let rows = 0;
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for(const k in attrs) e.setAttribute(k, attrs[k]); (parent||svg).appendChild(e); return e; };
 
@@ -303,20 +306,28 @@ renderGuide(false);
         t.textContent = ln;
       }
     });
-    if(n.kind !== 'spec') n.kids.forEach(k => nodes(k.node));
+    if(n.kind === 'spec'){
+      const words = EXTRA[n.num].split(' '), lines = []; let cur = '';
+      words.forEach(w => { if((cur + ' ' + w).trim().length > 60){ lines.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); });
+      lines.push(cur);
+      const ih = Math.max(n.h, lines.length*10.6 + 10);
+      el('rect', {class:'ni', x:IX, y:n.y - ih/2, width:IW, height:ih, rx:3});
+      lines.forEach((ln, i) => { const t = el('text', {class:'it', x:IX + 7, y:n.y - ih/2 + 5 + 10.6*(i + 0.85)}); t.textContent = ln; });
+    } else n.kids.forEach(k => nodes(k.node));
   }
   edges(ROOT); nodes(ROOT);
   const st = el('text', {class:'start', x:X[0], y:ROOT.y - ROOT.h/2 - 5}); st.textContent = 'START HERE';
+  const hd = el('text', {class:'start', x:IX, y:TOP - 6}); hd.textContent = 'SETTING AND PARENT ROCK';
 
   /* footer notes */
   const fy = TOP + 12*ROW + 20;
-  el('line', {class:'fr', x1:12, x2:1088, y1:fy - 8, y2:fy - 8});
+  el('line', {class:'fr', x1:12, x2:1278, y1:fy - 8, y2:fy - 8});
   const notes = [
     ['Foliated rocks and metamorphic grade', ['Slate, phyllite, schist and gneiss form a sequence of increasing','temperature and pressure. Grains coarsen and minerals separate','into bands. Phyllite is not in this set: grains are still too fine to','see, but it has a satiny sheen and wavy surfaces.']],
     ['Hardness benchmarks (Mohs)', ['Fingernail 2.5 · copper coin about 3.5 · steel nail and glass','about 5.5 · quartz 7.','Soapstone (talc) is 1. Marble (calcite) is 3. Quartzite is 7.']],
     ['Acid test and parent rocks', ['One drop of dilute HCl, goggles on. Calcite marble fizzes; dolomitic','marble needs scratched powder first.','Parent rock: slate and schist from shale, gneiss from granite,','marble from limestone, quartzite from sandstone.']]
   ];
-  [12, 380, 748].forEach((x, i) => {
+  [12, 440, 868].forEach((x, i) => {
     const h = el('text', {class:'fh', x, y:fy + 8}); h.textContent = notes[i][0];
     const t = el('text', {x, y:fy + 8 + 15, class:'rd'});
     notes[i][1].forEach((ln, j) => { const ts = el('tspan', {x, dy: j ? LH : 0}, t); ts.textContent = ln; });
