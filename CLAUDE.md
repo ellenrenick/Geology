@@ -27,5 +27,6 @@ Put new or changed content in the sandbox (178045) first. Copy it to the live co
 | Lab | Folder | Handout |
 | --- | --- | --- |
 | Weathering and Erosion | `labs/weathering-erosion/` | https://claude.ai/artifact/9yHMh3Dur8VpWsqpDyUraJ |
+| Lab 7.5 Metamorphic Grades and Facies | `labs/metamorphic-grades-facies/` | none yet |
 
 Published simulation: https://claude.ai/artifact/JhEJjtcs4WPcDRfP6qJUPZ

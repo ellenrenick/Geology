@@ -1,0 +1,722 @@
+<title>Lab 7.5 Metamorphic Grades and Facies</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow reading column; each lab question is a step with its own diagram, answer box, and Check button. */
+:root {
+  --bg: #eceff0;
+  --surface: #ffffff;
+  --ink: #1b2327;
+  --muted: #56646b;
+  --line: #cbd4d8;
+  --accent: #0e6a7d;
+  --accent-ink: #ffffff;
+  --ok: #17703f;
+  --ok-bg: #e0f2e7;
+  --no: #a2332a;
+  --no-bg: #fae6e3;
+  --z1: #cfe2cf; --z2: #e9e1a4; --z3: #f1c47b; --z4: #ee9f66; --z5: #df7350; --z6: #b5363b;
+  --and: #9c93d9; --ky: #7db0e3; --sill: #ec9489;
+  --earth: #d7cdbf; --mantle: #e2a98a; --crust: #c9c2b3; --slab: #7f8f9a; --water: #a8cfe6; --magma: #d9402f; --sand: #e9d9a6;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12181b; --surface: #1b2428; --ink: #e6ecee; --muted: #9bacb3; --line: #324048;
+    --accent: #55c1d6; --accent-ink: #0b1519;
+    --ok: #6fd69b; --ok-bg: #173325; --no: #f19a90; --no-bg: #3a1f1c;
+    --z1: #3e5a43; --z2: #6f6a2f; --z3: #94692a; --z4: #a85d2f; --z5: #b04a31; --z6: #c8484d;
+    --and: #6a62b3; --ky: #3f76ad; --sill: #b15f56;
+    --earth: #3a3d3f; --mantle: #7b4a37; --crust: #5a574f; --slab: #55646e; --water: #27506a; --magma: #e0523f; --sand: #7a6c3f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12181b; --surface: #1b2428; --ink: #e6ecee; --muted: #9bacb3; --line: #324048;
+  --accent: #55c1d6; --accent-ink: #0b1519;
+  --ok: #6fd69b; --ok-bg: #173325; --no: #f19a90; --no-bg: #3a1f1c;
+  --z1: #3e5a43; --z2: #6f6a2f; --z3: #94692a; --z4: #a85d2f; --z5: #b04a31; --z6: #c8484d;
+  --and: #6a62b3; --ky: #3f76ad; --sill: #b15f56;
+  --earth: #3a3d3f; --mantle: #7b4a37; --crust: #5a574f; --slab: #55646e; --water: #27506a; --magma: #e0523f; --sand: #7a6c3f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.12; margin: 0; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* top */
+.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+.top .wrap { padding-block: 28px 22px; display: grid; gap: 14px; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: clamp(30px, 6vw, 48px); font-weight: 800; }
+.lede { color: var(--muted); font-size: 18px; }
+.ident { display: grid; grid-template-columns: 2fr 1.2fr 1fr; gap: 10px; margin-top: 4px; }
+.ident label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; min-width: 0; }
+input[type=text], input[type=number], select, textarea {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; width: 100%; min-width: 0;
+}
+textarea { min-height: 110px; resize: vertical; }
+input[type=number] { max-width: 9rem; font-family: var(--font-mono); }
+
+/* sticky nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; gap: 8px 14px; align-items: center; padding-block: 8px; flex-wrap: wrap; }
+.nav a { font-family: var(--font-mono); font-size: 13px; text-decoration: none; color: var(--ink); padding: 4px 9px; border: 1px solid var(--line); border-radius: 5px; }
+.nav a[aria-current=true] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.nav .prog { margin-left: auto; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+/* parts */
+.part { padding-block: 40px 8px; display: grid; gap: 18px; }
+.part-head { display: grid; gap: 10px; }
+.part-head .letter { font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.part-head h2 { font-size: clamp(24px, 4.5vw, 34px); font-weight: 700; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.step h3 { font-size: 20px; font-weight: 700; }
+.tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 4px; margin-right: 8px; vertical-align: 3px; }
+.step.done { border-color: var(--ok); }
+.reflect { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.note { font-size: 15px; color: var(--muted); }
+.box { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.box svg { display: block; width: 100%; height: auto; min-width: 460px; }
+.btn { font: inherit; font-weight: 600; font-size: 15px; padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn:hover { filter: brightness(1.08); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.fb { font-size: 16px; padding: 10px 14px; border-radius: 6px; display: none; max-width: 68ch; }
+.fb.show { display: block; }
+.fb.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok); }
+.fb.no { background: var(--no-bg); color: var(--no); border: 1px solid var(--no); }
+.fb.info { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+.fb b { font-weight: 700; }
+.opts { display: grid; gap: 8px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--bg); }
+.opt input { margin-top: 5px; accent-color: var(--accent); }
+
+/* legend / readout */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+.readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.readout div { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+.readout small { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.readout strong { font-family: var(--font-mono); font-size: 18px; font-variant-numeric: tabular-nums; font-weight: 500; }
+
+/* svg text */
+svg text { fill: var(--ink); font-family: var(--font-body); font-size: 13px; }
+svg .mono { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
+svg .axis { stroke: var(--muted); stroke-width: 1; fill: none; }
+svg .grid { stroke: var(--line); stroke-width: 1; }
+svg .bd { stroke: var(--ink); stroke-width: 1.5; fill: none; }
+svg .bd.hl { stroke: var(--accent); stroke-width: 4; }
+.zone { cursor: pointer; stroke: var(--ink); stroke-width: 1.2; fill: var(--surface); }
+.zone:hover { fill: var(--bg); }
+.zone.on { fill: var(--z6); }
+.zone:focus-visible { outline: none; stroke: var(--accent); stroke-width: 3.5; }
+
+/* tables / selects */
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.pair { display: grid; gap: 4px; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 15px; }
+.pair b { font-family: var(--font-mono); font-size: 13px; }
+.pair.ok { border-color: var(--ok); background: var(--ok-bg); }
+.pair.no { border-color: var(--no); background: var(--no-bg); }
+.pair small { color: var(--muted); font-size: 13px; }
+.facies { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.facies div { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-size: 15px; background: var(--bg); }
+.facies h4 { margin: 0 0 3px; font-family: var(--font-display); font-size: 16px; }
+.facies .pt { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); }
+.chip.hit { color: var(--ok); border-color: var(--ok); background: var(--ok-bg); }
+
+/* summary */
+.summary { margin-block: 40px 56px; }
+.summary pre { white-space: pre-wrap; word-break: break-word; font-family: var(--font-mono); font-size: 13px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 14px; max-height: 360px; overflow: auto; margin: 0; }
+@media (max-width: 560px) { .ident { grid-template-columns: 1fr; } .step { padding: 16px; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Honors Geology · Lab 7.5</div>
+  <h1>Metamorphic Grades and Facies</h1>
+  <p class="lede">Work through three parts: Barrow's index-mineral zones, polymorphs on a pressure-temperature diagram, and Eskola's metamorphic facies in a subduction zone. Each question has a diagram you can use. Your answers save in this browser as you go.</p>
+  <div class="ident">
+    <label>Name<input type="text" id="who" autocomplete="name"></label>
+    <label>Course / section<input type="text" id="sect"></label>
+    <label>Date<input type="text" id="when"></label>
+  </div>
+</div></header>
+
+<nav class="nav" aria-label="Lab parts"><div class="wrap">
+  <a href="#partA" data-p="partA">Part A</a>
+  <a href="#partB" data-p="partB">Part B</a>
+  <a href="#partC" data-p="partC">Part C</a>
+  <a href="#summary" data-p="summary">My answers</a>
+  <span class="prog" id="prog">0 of 7 done</span>
+</div></nav>
+
+<main class="wrap">
+
+<!-- PART A -->
+<section class="part" id="partA">
+  <div class="part-head">
+    <span class="letter">Part A · Index minerals</span>
+    <h2>Barrow's metamorphic zones</h2>
+    <p>George Barrow mapped rocks in the Scottish Highlands that were metamorphosed by granitic intrusions. Walking away from the granite, he found mineral zones that tracked the intensity of metamorphism. His index minerals run from low to high pressure and temperature:</p>
+    <div class="legend" aria-label="Index minerals from lowest to highest grade">
+      <span><i class="sw" style="background:var(--z1)"></i>chlorite (lowest)</span>
+      <span><i class="sw" style="background:var(--z2)"></i>biotite</span>
+      <span><i class="sw" style="background:var(--z3)"></i>garnet</span>
+      <span><i class="sw" style="background:var(--z4)"></i>staurolite</span>
+      <span><i class="sw" style="background:var(--z5)"></i>kyanite</span>
+      <span><i class="sw" style="background:var(--z6)"></i>sillimanite (highest)</span>
+    </div>
+    <p class="note">The boundary between two zones is an <b>isograd</b>: a line of equal metamorphic grade, marked by the first appearance of an index mineral.</p>
+  </div>
+
+  <article class="step" id="a1" data-q="a1">
+    <h3><span class="tag">A1</span>Color the zone of maximum metamorphic intensity.</h3>
+    <p>On the map (Fig. A7.5.1), click the zone that shows the highest metamorphic intensity according to Barrow's index minerals. Click again to undo. Zones are named by the index mineral found in them.</p>
+    <div class="box"><svg viewBox="0 0 640 310" role="group" aria-label="Map of Barrow zones as nested ovals, chlorite outermost, sillimanite innermost" id="barrow"></svg></div>
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button><button class="btn ghost" id="clearMap">Clear map</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+</section>
+
+<!-- PART B -->
+<section class="part" id="partB">
+  <div class="part-head">
+    <span class="letter">Part B · Polymorphs</span>
+    <h2>Reading a pressure-temperature diagram</h2>
+    <p>Metamorphism is driven mostly by rising pressure and temperature. A P-T (phase) diagram shows which index mineral is stable under which conditions. Andalusite, kyanite and sillimanite are <b>polymorphs</b>: same chemical formula (Al<sub>2</sub>SiO<sub>5</sub>), different crystal structure. Each is stable under its own range of P and T. Two can coexist only on the line between their fields. All three coexist only at the triple point, near 500 °C and 4 kbar, about 15 km deep.</p>
+  </div>
+
+  <article class="step" id="explore">
+    <h3><span class="tag">Explore</span>Fig. A7.5.2 · Place a point on the diagram</h3>
+    <p>Click or tap the diagram to drop a point, or focus it and use the arrow keys. The readout shows the stable polymorph, the depth, and the geothermal gradient (temperature divided by depth) at that point. This is not graded.</p>
+    <div class="box"><svg viewBox="0 0 700 430" id="ptd" tabindex="0" role="application" aria-label="Pressure temperature diagram for Al2SiO5 polymorphs. Use arrow keys to move the point."></svg></div>
+    <div class="readout" aria-live="polite">
+      <div><small>Temperature</small><strong id="rT">-</strong></div>
+      <div><small>Pressure</small><strong id="rP">-</strong></div>
+      <div><small>Depth</small><strong id="rD">-</strong></div>
+      <div><small>Gradient</small><strong id="rG">-</strong></div>
+      <div><small>Stable</small><strong id="rM">-</strong></div>
+    </div>
+    <div class="actions"><button class="btn ghost" id="toTriple">Jump to triple point</button></div>
+    <p class="note">Depth uses about 3.3 km per kbar, which matches the right-hand axis of the printed figure. The temperature axis starts at 300 °C here; the printed figure has an axis break near the origin.</p>
+  </article>
+
+  <article class="step" id="b1" data-q="b1">
+    <h3><span class="tag">B1</span>Which region was metamorphosed at higher pressure?</h3>
+    <p>Study the mineral zones and isograds on the two maps (Fig. A7.5.3). Which region was metamorphosed at higher pressure, and how can you tell? Use the diagram above: use the buttons to highlight the boundary that each map's zones cross.</p>
+    <div class="box"><svg viewBox="0 0 640 230" id="maps" role="img" aria-label="Map A shows andalusite and sillimanite zones next to granite. Map B shows muscovite, kyanite and sillimanite zones next to granite."></svg></div>
+    <div class="actions">
+      <button class="btn ghost" id="hlAnd">Show andalusite–sillimanite boundary</button>
+      <button class="btn ghost" id="hlKy">Show kyanite–sillimanite boundary</button>
+    </div>
+    <div class="opts" role="radiogroup" aria-label="Which region was metamorphosed at higher pressure">
+      <label class="opt"><input type="radio" name="b1" value="A"><span>Map A</span></label>
+      <label class="opt"><input type="radio" name="b1" value="B"><span>Map B</span></label>
+    </div>
+    <label class="note" for="b1why">How can you tell? Write your reasoning.</label>
+    <textarea id="b1why" placeholder="Name the minerals on each map and where each one is stable on the diagram."></textarea>
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+
+  <article class="step" id="b2" data-q="b2">
+    <h3><span class="tag">B2</span>What was the minimum temperature for Map B?</h3>
+    <p>Look at which polymorphs appear in Map B. Find where that pair of minerals can coexist on the diagram. What is the lowest temperature on that boundary?</p>
+    <label class="note" for="b2t">Minimum temperature (°C)</label>
+    <input type="number" id="b2t" inputmode="numeric" min="0" max="1000" step="10">
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+</section>
+
+<!-- PART C -->
+<section class="part" id="partC">
+  <div class="part-head">
+    <span class="letter">Part C · Facies</span>
+    <h2>Eskola's metamorphic facies</h2>
+    <p>Finnish geologist Pentti Eskola showed that basalt metamorphoses into different <b>facies</b> (unique mineral assemblages) as pressure and temperature change.</p>
+    <div class="facies">
+      <div><h4>Amphibolite</h4><span class="pt">low P · high T</span><p>Black hornblende amphibole, sillimanite.</p></div>
+      <div><h4>Greenschist</h4><span class="pt">low P · low T</span><p>Green actinolite amphibole and chlorite.</p></div>
+      <div><h4>Eclogite</h4><span class="pt">high P · high T</span><p>Red garnet, green pyroxene.</p></div>
+      <div><h4>Blueschist</h4><span class="pt">high P · low T</span><p>Blue amphibole (glaucophane, riebeckite) and lawsonite.</p></div>
+    </div>
+  </div>
+
+  <article class="step" id="c1" data-q="c1">
+    <h3><span class="tag">C1</span>Name the facies on dotted lines A to D.</h3>
+    <p>On this P-T diagram (Fig. A7.5.4), pressure and depth increase downward, and temperature increases to the right. Each dotted line crosses one facies. Choose the facies for each line. Your printed diagram has the exact facies boundaries. This redrawn version shows the dotted lines and the named fields that are already labeled.</p>
+    <div class="box"><svg viewBox="0 0 700 470" id="fac" role="img" aria-label="Pressure temperature diagram with four dotted lines labeled A to D"></svg></div>
+    <div class="pairs" id="c1pairs"></div>
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+
+  <article class="step" id="c2" data-q="c2">
+    <h3><span class="tag">C2</span><span class="reflect">Reflect &amp; discuss</span><br>What is the significance of the gray area marked with a question mark?</h3>
+    <p>Hint: where on or in Earth would you find the P-T conditions in that gray area? Compare the pressure and temperature there with the geothermal gradients you saw in the Explore diagram.</p>
+    <textarea id="c2t" placeholder="Describe the conditions in the gray area and whether they occur in Earth."></textarea>
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+
+  <article class="step" id="c3" data-q="c3">
+    <h3><span class="tag">C3</span>Place each facies in the subduction zone.</h3>
+    <p>When Eskola published in the 1920s, plate tectonics did not exist yet. Today we know volcanic arcs form where oceanic lithosphere subducts beneath a continent. The <b>geothermal gradient</b> (rate of temperature change with depth) varies a lot across this setting. Choose the facies most likely at each starred location (Fig. A7.5.5).</p>
+    <div class="box"><svg viewBox="0 0 680 340" id="sub" role="img" aria-label="Cross section of a subduction zone with four starred locations"></svg></div>
+    <div class="pairs" id="c3pairs"></div>
+    <div class="actions"><button class="btn" data-check>Check</button><button class="btn ghost" data-hint>Hint</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+
+  <article class="step" id="c4" data-q="c4">
+    <h3><span class="tag">C4</span><span class="reflect">Reflect &amp; discuss</span><br>How are pressure, temperature, depth and the intensity of metamorphism related?</h3>
+    <p>Write a brief description in your own words based on what you learned in this activity.</p>
+    <textarea id="c4t" placeholder="Write 3 to 5 sentences."></textarea>
+    <div class="chips" id="c4chips" aria-label="Key terms used"></div>
+    <div class="actions"><button class="btn" data-check>Check</button></div>
+    <p class="fb" role="status"></p>
+  </article>
+</section>
+
+<section class="summary" id="summary">
+  <div class="step">
+    <h2 style="font-size:26px">My answers</h2>
+    <p class="note">This page checks your work as practice. To turn it in, copy your answers and paste them into the assignment in Canvas.</p>
+    <pre id="sumText"></pre>
+    <div class="actions"><button class="btn" id="copyAll">Copy my answers</button><span class="note" id="copyMsg" role="status"></span></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- saved state ---------- */
+  var S = {};
+  try { S = JSON.parse(localStorage.getItem("lab75") || "{}") || {}; } catch (e) { S = {}; }
+  function save() { try { localStorage.setItem("lab75", JSON.stringify(S)); } catch (e) {} }
+  S.done = S.done || {};
+  var QS = ["a1", "b1", "b2", "c1", "c2", "c3", "c4"];
+
+  function fb(id, kind, html) {
+    var f = $("#" + id + " .fb");
+    f.className = "fb show " + kind;
+    f.innerHTML = html;
+  }
+  function markDone(id, ok) {
+    S.done[id] = !!ok; save();
+    $("#" + id).classList.toggle("done", !!ok);
+    progress(); summary();
+  }
+  function progress() {
+    var n = QS.filter(function (q) { return S.done[q]; }).length;
+    $("#prog").textContent = n + " of " + QS.length + " done";
+  }
+
+  /* ---------- identity ---------- */
+  ["who", "sect", "when"].forEach(function (id) {
+    var i = $("#" + id);
+    i.value = S[id] || "";
+    i.addEventListener("input", function () { S[id] = i.value; save(); summary(); });
+  });
+
+  /* ---------- A1: Barrow map ---------- */
+  var zones = [
+    { n: "chlorite", rx: 305, ry: 142, c: "--z1" },
+    { n: "biotite", rx: 252, ry: 118, c: "--z2" },
+    { n: "garnet", rx: 200, ry: 94, c: "--z3" },
+    { n: "staurolite", rx: 150, ry: 70, c: "--z4" },
+    { n: "kyanite", rx: 104, ry: 48, c: "--z5" },
+    { n: "sillimanite", rx: 60, ry: 26, c: "--z6" }
+  ];
+  var bs = $("#barrow"), cx = 320, cy = 155;
+  S.zonesOn = S.zonesOn || [];
+  zones.forEach(function (z, i) {
+    var e = el("ellipse", { cx: cx, cy: cy, rx: z.rx, ry: z.ry, "class": "zone", tabindex: 0, role: "button", "aria-pressed": "false", "aria-label": z.n + " zone" }, bs);
+    z.el = e;
+    e.style.setProperty("--zc", "var(" + z.c + ")");
+    function toggle() {
+      var on = S.zonesOn.indexOf(z.n) < 0;
+      S.zonesOn = S.zonesOn.filter(function (n) { return n !== z.n; });
+      if (on) S.zonesOn.push(z.n);
+      paintMap(); save();
+    }
+    e.addEventListener("click", toggle);
+    e.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggle(); } });
+  });
+  zones.forEach(function (z, i) {
+    var y = i < 5 ? cy + z.ry - (zones[i].ry - zones[i + 1].ry) / 2 + 4 : cy + 5;
+    el("text", { x: cx, y: y, "text-anchor": "middle", "pointer-events": "none", "font-weight": 600 }, bs, z.n);
+  });
+  function paintMap() {
+    zones.forEach(function (z) {
+      var on = S.zonesOn.indexOf(z.n) >= 0;
+      z.el.classList.toggle("on", on);
+      z.el.setAttribute("aria-pressed", on);
+      z.el.style.fill = on ? "var(" + z.c + ")" : "";
+    });
+  }
+  paintMap();
+  $("#clearMap").onclick = function () { S.zonesOn = []; paintMap(); save(); };
+
+  /* ---------- Shared P-T diagram (Part B) ---------- */
+  var P0 = { l: 58, r: 64, t: 36, b: 56, W: 700, H: 430 }, TMIN = 300, TMAX = 900, PMAX = 12;
+  function X(T) { return P0.l + (T - TMIN) / (TMAX - TMIN) * (P0.W - P0.l - P0.r); }
+  function Y(P) { return P0.t + P / PMAX * (P0.H - P0.t - P0.b); }
+  function pKyAnd(T) { return 1.5 + (T - 300) * 0.0125; }
+  function pSillAnd(T) { return 4 - (T - 500) * (4 / 280); }
+  function pKySill(T) { return 4 + (T - 500) * (7 / 400); }
+  function stable(T, P) {
+    if (T <= 500) return P < pKyAnd(T) ? "andalusite" : "kyanite";
+    if (P < pSillAnd(T)) return "andalusite";
+    return P < pKySill(T) ? "sillimanite" : "kyanite";
+  }
+  var svg = $("#ptd");
+  function pts(a) { return a.map(function (p) { return X(p[0]) + "," + Y(p[1]); }).join(" "); }
+  el("polygon", { points: pts([[300, 0], [780, 0], [500, 4], [300, 1.5]]), fill: "var(--and)", "fill-opacity": .75 }, svg);
+  el("polygon", { points: pts([[780, 0], [900, 0], [900, 11], [500, 4]]), fill: "var(--sill)", "fill-opacity": .75 }, svg);
+  el("polygon", { points: pts([[300, 1.5], [500, 4], [900, 11], [900, 12], [300, 12]]), fill: "var(--ky)", "fill-opacity": .75 }, svg);
+  for (var T = 300; T <= 900; T += 100) {
+    el("line", { x1: X(T), x2: X(T), y1: Y(0), y2: Y(12), "class": "grid", "stroke-opacity": .5 }, svg);
+    el("text", { x: X(T), y: Y(0) - 8, "text-anchor": "middle", "class": "mono" }, svg, T);
+  }
+  for (var P = 0; P <= 12; P += 2) {
+    el("line", { x1: X(300), x2: X(900), y1: Y(P), y2: Y(P), "class": "grid", "stroke-opacity": .5 }, svg);
+    el("text", { x: X(300) - 8, y: Y(P) + 4, "text-anchor": "end", "class": "mono" }, svg, P);
+  }
+  [0, 10, 20, 30, 40].forEach(function (d) {
+    el("text", { x: X(900) + 8, y: Y(d / 3.33) + 4, "class": "mono" }, svg, d);
+  });
+  el("rect", { x: X(300), y: Y(0), width: X(900) - X(300), height: Y(12) - Y(0), fill: "none", "class": "axis" }, svg);
+  el("text", { x: (X(300) + X(900)) / 2, y: 16, "text-anchor": "middle", "font-weight": 600 }, svg, "Temperature (°C)");
+  el("text", { x: 14, y: (Y(0) + Y(12)) / 2, "text-anchor": "middle", "font-weight": 600, transform: "rotate(-90 14 " + (Y(0) + Y(12)) / 2 + ")" }, svg, "Pressure (kbar)");
+  el("text", { x: P0.W - 12, y: (Y(0) + Y(12)) / 2, "text-anchor": "middle", "font-weight": 600, transform: "rotate(90 " + (P0.W - 12) + " " + (Y(0) + Y(12)) / 2 + ")" }, svg, "Depth (km)");
+  el("text", { x: X(400), y: Y(0.9), "text-anchor": "middle", "font-weight": 700 }, svg, "andalusite");
+  el("text", { x: X(790), y: Y(5), "text-anchor": "middle", "font-weight": 700 }, svg, "sillimanite");
+  el("text", { x: X(520), y: Y(8.5), "text-anchor": "middle", "font-weight": 700 }, svg, "kyanite");
+  var bdAnd = el("polyline", { points: pts([[500, 4], [780, 0]]), "class": "bd" }, svg);
+  var bdKy = el("polyline", { points: pts([[500, 4], [900, 11]]), "class": "bd" }, svg);
+  el("polyline", { points: pts([[300, 1.5], [500, 4]]), "class": "bd" }, svg);
+  el("circle", { cx: X(500), cy: Y(4), r: 5, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": 2 }, svg);
+  el("text", { x: X(500) + 9, y: Y(4) + 16, "class": "mono" }, svg, "triple point ≈ 500 °C, 4 kbar");
+  var mk = el("g", {}, svg);
+  var mkc = el("circle", { r: 8, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2.5 }, mk);
+  var cur = { T: 650, P: 4 };
+  function setPt(T, P) {
+    cur.T = Math.max(TMIN, Math.min(TMAX, T)); cur.P = Math.max(0, Math.min(PMAX, P));
+    mkc.setAttribute("cx", X(cur.T)); mkc.setAttribute("cy", Y(cur.P));
+    var d = cur.P * 3.33;
+    $("#rT").textContent = Math.round(cur.T) + " °C";
+    $("#rP").textContent = cur.P.toFixed(1) + " kbar";
+    $("#rD").textContent = Math.round(d) + " km";
+    $("#rG").textContent = d > 0.5 ? Math.round(cur.T / d) + " °C/km" : "-";
+    $("#rM").textContent = stable(cur.T, cur.P);
+  }
+  function fromEvent(ev) {
+    var r = svg.getBoundingClientRect();
+    var vx = (ev.clientX - r.left) / r.width * P0.W, vy = (ev.clientY - r.top) / r.height * P0.H;
+    setPt(TMIN + (vx - P0.l) / (P0.W - P0.l - P0.r) * (TMAX - TMIN), (vy - P0.t) / (P0.H - P0.t - P0.b) * PMAX);
+  }
+  var drag = false;
+  svg.addEventListener("pointerdown", function (e) { drag = true; fromEvent(e); });
+  svg.addEventListener("pointermove", function (e) { if (drag) fromEvent(e); });
+  window.addEventListener("pointerup", function () { drag = false; });
+  svg.addEventListener("keydown", function (e) {
+    var m = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -.25], ArrowDown: [0, .25] }[e.key];
+    if (m) { e.preventDefault(); setPt(cur.T + m[0], cur.P + m[1]); }
+  });
+  $("#toTriple").onclick = function () { setPt(500, 4); };
+  setPt(cur.T, cur.P);
+  function hl(which) {
+    bdAnd.classList.toggle("hl", which === "and");
+    bdKy.classList.toggle("hl", which === "ky");
+    if (which) $("#explore").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  $("#hlAnd").onclick = function () { hl("and"); };
+  $("#hlKy").onclick = function () { hl("ky"); };
+
+  /* ---------- B1 maps ---------- */
+  var ms = $("#maps");
+  function mapSvg(ox, title, layers) {
+    var g = el("g", { transform: "translate(" + ox + ",30)" }, ms);
+    el("text", { x: 0, y: -10, "font-weight": 700 }, g, title);
+    layers.forEach(function (l) { el("polygon", { points: l.p, fill: l.f, stroke: "var(--ink)", "stroke-width": 1 }, g); });
+    el("rect", { x: 0, y: 0, width: 290, height: 170, fill: "none", "class": "axis" }, g);
+    return g;
+  }
+  var gA = mapSvg(20, "Map A", [
+    { p: "0,0 290,0 290,170 190,170 140,110 80,60 40,20 30,0", f: "var(--and)" },
+    { p: "0,0 30,0 40,20 80,60 140,110 190,170 0,170", f: "var(--sill)" }
+  ]);
+  el("polygon", { points: "0,110 40,125 70,160 40,170 0,170", fill: "var(--earth)", stroke: "var(--ink)" }, gA);
+  el("text", { x: 14, y: 156, "class": "mono" }, gA, "granite");
+  el("text", { x: 195, y: 75, "text-anchor": "middle", "font-weight": 600 }, gA, "andalusite");
+  el("text", { x: 70, y: 100, "font-weight": 600, transform: "rotate(38 70 100)" }, gA, "sillimanite");
+  var gB = mapSvg(335, "Map B", [
+    { p: "0,0 290,0 290,170 230,170 140,60 90,0", f: "var(--ky)" },
+    { p: "170,0 290,0 290,50", f: "#e6d98a" },
+    { p: "0,0 90,0 140,60 230,170 0,170", f: "var(--sill)" }
+  ]);
+  el("polygon", { points: "0,110 40,125 70,160 40,170 0,170", fill: "var(--earth)", stroke: "var(--ink)" }, gB);
+  el("text", { x: 14, y: 156, "class": "mono" }, gB, "granite");
+  el("text", { x: 175, y: 120, "text-anchor": "middle", "font-weight": 600, transform: "rotate(52 175 120)" }, gB, "kyanite");
+  el("text", { x: 70, y: 100, "font-weight": 600, transform: "rotate(40 70 100)" }, gB, "sillimanite");
+  el("text", { x: 262, y: 24, "text-anchor": "middle", "font-weight": 600, "font-size": 12 }, gB, "muscovite");
+
+  /* ---------- C1 facies diagram ---------- */
+  var fs = $("#fac"), F = { l: 58, r: 64, t: 30, b: 56, W: 700, H: 470 };
+  function FX(T) { return F.l + T / 900 * (F.W - F.l - F.r); }
+  function FY(P) { return F.t + P / 15 * (F.H - F.t - F.b); }
+  function fp(a) { return a.map(function (p) { return FX(p[0]) + "," + FY(p[1]); }).join(" "); }
+  el("rect", { x: FX(0), y: FY(0), width: FX(900) - FX(0), height: FY(15) - FY(0), fill: "var(--surface)", "class": "axis" }, fs);
+  for (var t2 = 0; t2 <= 900; t2 += 100) {
+    el("line", { x1: FX(t2), x2: FX(t2), y1: FY(0), y2: FY(15), "class": "grid", "stroke-opacity": .5 }, fs);
+    el("text", { x: FX(t2), y: FY(15) + 18, "text-anchor": "middle", "class": "mono" }, fs, t2);
+  }
+  for (var p2 = 0; p2 <= 15; p2 += 5) {
+    el("line", { x1: FX(0), x2: FX(900), y1: FY(p2), y2: FY(p2), "class": "grid", "stroke-opacity": .5 }, fs);
+    el("text", { x: FX(0) - 8, y: FY(p2) + 4, "text-anchor": "end", "class": "mono" }, fs, p2);
+  }
+  [0, 10, 20, 30, 40, 50].forEach(function (d) { el("text", { x: FX(900) + 8, y: FY(d / 3.33) + 4, "class": "mono" }, fs, d); });
+  el("text", { x: (FX(0) + FX(900)) / 2, y: F.H - 10, "text-anchor": "middle", "font-weight": 600 }, fs, "Temperature (°C)");
+  el("text", { x: 14, y: (FY(0) + FY(15)) / 2, "text-anchor": "middle", "font-weight": 600, transform: "rotate(-90 14 " + (FY(0) + FY(15)) / 2 + ")" }, fs, "Pressure (kbar)");
+  el("text", { x: F.W - 12, y: (FY(0) + FY(15)) / 2, "text-anchor": "middle", "font-weight": 600, transform: "rotate(90 " + (F.W - 12) + " " + (FY(0) + FY(15)) / 2 + ")" }, fs, "Depth (km)");
+  el("polygon", { points: fp([[0, 1.2], [60, 3], [130, 6.5], [200, 9.5], [250, 12.5], [285, 15], [0, 15]]), fill: "var(--slab)", "fill-opacity": .55 }, fs);
+  el("polygon", { points: fp([[0, 0], [110, 0], [80, 2], [0, 2]]), fill: "var(--z1)" }, fs);
+  el("text", { x: FX(150), y: FY(7.5), "font-size": 30, "font-weight": 700, "text-anchor": "middle" }, fs, "?");
+  [["diagenesis", 5, 1.1, 0], ["zeolite", 140, 2.8, 0], ["subgreenschist", 250, 3.4, 0], ["px-hornfels", 700, .8, 0], ["sanidinite", 840, .8, 0], ["granulite", 740, 6.5, 0], ["epidote-amphibolite", 470, 5.2, 0]].forEach(function (t) {
+    el("text", { x: FX(t[1]), y: FY(t[2]), "class": "mono", "text-anchor": t[1] > 800 ? "end" : "start", "font-size": 12 }, fs, t[0]);
+  });
+  var lines = [
+    { id: "A", pts: [[200, 9.7], [420, 14.3]], lab: [190, 9.2] },
+    { id: "B", pts: [[400, 1.2], [400, 7.5]], lab: [412, 1.9] },
+    { id: "C", pts: [[640, 3], [640, 10.5]], lab: [652, 10.6] },
+    { id: "D", pts: [[545, 14.6], [820, 14.6]], lab: [532, 14.1] }
+  ];
+  lines.forEach(function (l) {
+    el("polyline", { points: fp(l.pts), fill: "none", stroke: "var(--no)", "stroke-width": 3, "stroke-dasharray": "5 5" }, fs);
+    el("text", { x: FX(l.lab[0]), y: FY(l.lab[1]), fill: "var(--no)", "font-weight": 800, "font-size": 18, style: "fill:var(--no)" }, fs, l.id);
+  });
+
+  var FAC = ["amphibolite", "greenschist", "eclogite", "blueschist"];
+  var C1 = { A: "blueschist", B: "greenschist", C: "amphibolite", D: "eclogite" };
+  var C1why = {
+    A: "A runs at about 10–14 kbar but only 200–400 °C. High pressure with low temperature is blueschist.",
+    B: "B sits near 400 °C at only 1–7 kbar. Low pressure and low temperature is greenschist.",
+    C: "C sits at roughly 650 °C with modest pressure. Low pressure and high temperature is amphibolite.",
+    D: "D is at about 15 kbar and runs from 550 to 800 °C. High pressure with high temperature is eclogite."
+  };
+  S.c1 = S.c1 || {};
+  function selectFor(id, store, key, opts) {
+    var s = document.createElement("select");
+    s.id = id;
+    s.innerHTML = '<option value="">Choose…</option>' + opts.map(function (o) { return '<option value="' + o + '">' + o + '</option>'; }).join("");
+    s.value = (S[store] && S[store][key]) || "";
+    s.addEventListener("change", function () { S[store][key] = s.value; save(); summary(); });
+    return s;
+  }
+  var c1box = $("#c1pairs");
+  Object.keys(C1).forEach(function (k) {
+    var d = document.createElement("div"); d.className = "pair"; d.id = "c1p" + k;
+    d.innerHTML = '<b>Line ' + k + '</b><label class="note" for="c1s' + k + '">Facies</label>';
+    d.appendChild(selectFor("c1s" + k, "c1", k, FAC));
+    d.insertAdjacentHTML("beforeend", "<small></small>");
+    c1box.appendChild(d);
+  });
+
+  /* ---------- C3 subduction diagram ---------- */
+  var ss = $("#sub");
+  function slabY(x) { return 100 + (x - 60) * 0.55; }
+  el("rect", { x: 0, y: 0, width: 680, height: 340, fill: "var(--mantle)" }, ss);
+  el("rect", { x: 0, y: 84, width: 140, height: 16, fill: "var(--water)" }, ss);
+  el("polygon", { points: "60,100 190,72 680,72 680,185 " + (60 + 85 / 0.55) + ",185", fill: "var(--crust)", stroke: "var(--ink)", "stroke-width": 1 }, ss);
+  el("polygon", { points: "0,100 60,100 440,309 440,337 60,128 0,128", fill: "var(--slab)", stroke: "var(--ink)", "stroke-width": 1 }, ss);
+  el("polygon", { points: "560,72 680,72 680,130 600,130", fill: "var(--sand)", stroke: "var(--ink)" }, ss);
+  el("polygon", { points: "385,72 440,30 495,72", fill: "var(--crust)", stroke: "var(--ink)" }, ss);
+  el("ellipse", { cx: 440, cy: 122, rx: 44, ry: 28, fill: "var(--magma)", "fill-opacity": .85 }, ss);
+  el("text", { x: 440, y: 126, "text-anchor": "middle", "font-weight": 700, style: "fill:#fff" }, ss, "magma");
+  el("text", { x: 625, y: 104, "text-anchor": "middle", "class": "mono" }, ss, "subsiding basin");
+  el("text", { x: 10, y: 78, "class": "mono" }, ss, "ocean");
+  el("text", { x: 150, y: 218, "class": "mono", transform: "rotate(29 150 218)" }, ss, "subducting oceanic lithosphere");
+  el("text", { x: 600, y: 270, "class": "mono", "text-anchor": "middle" }, ss, "mantle");
+  function star(x, y, n) {
+    var g = el("g", {}, ss);
+    el("polygon", { points: "0,-13 3.8,-4 13,-4 5.7,2.3 8,12 0,6.5 -8,12 -5.7,2.3 -13,-4 -3.8,-4", transform: "translate(" + x + "," + y + ")", fill: "#ffd23f", stroke: "#222", "stroke-width": 1.4 }, g);
+    el("circle", { cx: x + 17, cy: y - 14, r: 11, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": 1.5 }, g);
+    el("text", { x: x + 17, y: y - 9.5, "text-anchor": "middle", "font-weight": 800 }, g, n);
+  }
+  star(150, 176, "1"); star(335, 258, "2"); star(376, 100, "3"); star(595, 158, "4");
+  var C3 = { 1: "blueschist", 2: "eclogite", 3: "amphibolite", 4: "greenschist" };
+  var C3lab = { 1: "Shallow, in the subducting sediments (cold slab)", 2: "Deep in the subducting slab", 3: "Shallow crust beside the magma body", 4: "Bottom of the sedimentary basin" };
+  var C3why = {
+    1: "Star 1 is shallow in a cold slab: high pressure, low temperature (a low geothermal gradient). That is blueschist.",
+    2: "Star 2 is deeper in the same slab. Pressure and temperature are both high, which is eclogite.",
+    3: "Star 3 is shallow crust heated by magma. Low pressure and high temperature (a high gradient) is amphibolite.",
+    4: "Star 4 is the base of a thick basin: modest pressure, low temperature, a low-grade setting. That is greenschist."
+  };
+  S.c3 = S.c3 || {};
+  var c3box = $("#c3pairs");
+  [1, 2, 3, 4].forEach(function (k) {
+    var d = document.createElement("div"); d.className = "pair"; d.id = "c3p" + k;
+    d.innerHTML = '<b>Star ' + k + '</b><small>' + C3lab[k] + '</small><label class="note" for="c3s' + k + '">Facies</label>';
+    d.appendChild(selectFor("c3s" + k, "c3", k, FAC));
+    d.insertAdjacentHTML("beforeend", "<small class='why'></small>");
+    c3box.appendChild(d);
+  });
+
+  /* ---------- text answers ---------- */
+  ["b1why", "c2t", "c4t", "b2t"].forEach(function (id) {
+    var i = $("#" + id);
+    i.value = S[id] || "";
+    i.addEventListener("input", function () { S[id] = i.value; save(); summary(); if (id === "c4t") chips(); });
+  });
+  S.b1 = S.b1 || "";
+  $$('input[name=b1]').forEach(function (r) {
+    r.checked = r.value === S.b1;
+    r.addEventListener("change", function () { S.b1 = r.value; save(); summary(); });
+  });
+  var terms = ["pressure", "temperature", "depth", "grade", "geothermal", "index mineral", "facies", "increase"];
+  function chips() {
+    var v = ($("#c4t").value || "").toLowerCase();
+    $("#c4chips").innerHTML = terms.map(function (t) { return '<span class="chip' + (v.indexOf(t) >= 0 ? " hit" : "") + '">' + t + '</span>'; }).join("");
+  }
+  chips();
+
+  /* ---------- checks & hints ---------- */
+  var checks = {
+    a1: function () {
+      var on = S.zonesOn;
+      if (on.length === 1 && on[0] === "sillimanite") { fb("a1", "ok", "<b>Correct.</b> Sillimanite is the highest-grade index mineral, so the innermost zone, closest to the granite, shows the most intense metamorphism. Heat from the intrusion is greatest there, and grade drops outward through kyanite, staurolite, garnet, biotite and chlorite."); return true; }
+      if (!on.length) { fb("a1", "no", "<b>Not yet.</b> Click a zone first."); return false; }
+      if (on.indexOf("sillimanite") >= 0) { fb("a1", "no", "<b>Close.</b> Sillimanite is right, but only one zone should be colored. Click the others again to clear them."); return false; }
+      fb("a1", "no", "<b>Not yet.</b> Check the order of the index minerals again. Which one is at the high-P-T end of the list?"); return false;
+    },
+    b1: function () {
+      var v = S.b1, why = (S.b1why || "").toLowerCase();
+      if (!v) { fb("b1", "no", "<b>Not yet.</b> Choose Map A or Map B."); return false; }
+      if (v !== "B") { fb("b1", "no", "<b>Not yet.</b> Map A has andalusite next to sillimanite. Use the button to show that boundary and note its pressure."); return false; }
+      var mentions = why.indexOf("kyanite") >= 0;
+      if (!mentions) { fb("b1", "no", "<b>Map B is right.</b> Now add your reasoning. Name the mineral that tells you the pressure was high."); return false; }
+      fb("b1", "ok", "<b>Correct.</b> Map B contains kyanite, which is stable at high pressure and sits on the high-pressure side of the diagram. Map A has andalusite, the low-pressure polymorph. Both maps have sillimanite, so the difference is the pressure."); return true;
+    },
+    b2: function () {
+      var v = parseFloat(S.b2t);
+      if (isNaN(v)) { fb("b2", "no", "<b>Not yet.</b> Enter a temperature in °C."); return false; }
+      if (v >= 475 && v <= 525) { fb("b2", "ok", "<b>Correct.</b> Map B has kyanite and sillimanite, so the rocks were at or beyond the kyanite–sillimanite boundary. That boundary starts at the triple point, so the minimum temperature is about 500 °C. Higher pressure means a higher temperature along that line."); return true; }
+      if (v < 475) { fb("b2", "no", "<b>Too low.</b> Click the kyanite–sillimanite boundary in the diagram and find where it begins. No point on that boundary is below the triple point."); return false; }
+      fb("b2", "no", "<b>Too high.</b> The question asks for the minimum. Find the lowest-temperature point of the kyanite–sillimanite boundary."); return false;
+    },
+    c1: function () {
+      var right = 0, miss = [];
+      Object.keys(C1).forEach(function (k) {
+        var d = $("#c1p" + k), v = S.c1[k];
+        d.classList.remove("ok", "no");
+        d.querySelector("small").textContent = "";
+        if (v === C1[k]) { d.classList.add("ok"); right++; d.querySelector("small").textContent = C1why[k]; }
+        else if (v) { d.classList.add("no"); d.querySelector("small").textContent = "Compare the pressure and temperature of this line with each facies description."; miss.push(k); }
+        else miss.push(k);
+      });
+      if (right === 4) { fb("c1", "ok", "<b>All four correct.</b> The facies sort by pressure and temperature: blueschist (high P, low T), greenschist (low P, low T), amphibolite (low P, high T), eclogite (high P, high T)."); return true; }
+      fb("c1", "no", "<b>" + right + " of 4 correct.</b> Recheck line" + (miss.length > 1 ? "s " : " ") + miss.join(", ") + ". Read each line's pressure on the left axis and its temperature on the bottom axis."); return false;
+    },
+    c2: function () {
+      var t = (S.c2t || "").toLowerCase(), words = t.split(/\s+/).filter(Boolean).length;
+      if (words < 8) { fb("c2", "no", "<b>Not yet.</b> Write at least a sentence or two."); return false; }
+      var good = /(not|never|no |nowhere|doesn.t|don.t|cannot|can.t|unlikely)/.test(t) && /(earth|crust|mantle|gradient|exist|occur|found)/.test(t);
+      if (good) { fb("c2", "ok", "<b>Good.</b> The gray area has high pressure at very low temperature. Earth's geothermal gradient is too high for rocks to be that cold at that depth, so no natural rocks record those conditions. Subducting slabs come closest, since they carry cold rock downward faster than it can heat up."); return true; }
+      fb("c2", "info", "<b>Compare with this.</b> The gray area has high pressure at very low temperature. Ask whether Earth's geothermal gradient ever gets that low, and whether rocks formed there could exist. Revise your answer, then check again."); return false;
+    },
+    c3: function () {
+      var right = 0, miss = [];
+      [1, 2, 3, 4].forEach(function (k) {
+        var d = $("#c3p" + k), v = S.c3[k], w = d.querySelector(".why");
+        d.classList.remove("ok", "no"); w.textContent = "";
+        if (v === C3[k]) { d.classList.add("ok"); right++; w.textContent = C3why[k]; }
+        else { if (v) d.classList.add("no"); miss.push(k); if (v) w.textContent = "Think about the geothermal gradient at this location."; }
+      });
+      if (right === 4) { fb("c3", "ok", "<b>All four correct.</b> The cold slab makes blueschist and eclogite (high P at a low gradient). Heat from magma makes amphibolite at shallow depth. A deep basin gives low-grade greenschist."); return true; }
+      fb("c3", "no", "<b>" + right + " of 4 correct.</b> Recheck star" + (miss.length > 1 ? "s " : " ") + miss.join(", ") + ". Use your answers from C1: high P with low T lives in the cold slab."); return false;
+    },
+    c4: function () {
+      var t = (S.c4t || "").toLowerCase(), words = t.split(/\s+/).filter(Boolean).length;
+      var hit = ["pressure", "temperature", "depth"].filter(function (x) { return t.indexOf(x) >= 0; }).length;
+      if (words < 20) { fb("c4", "no", "<b>Not yet.</b> Write a few more sentences (about 20 words or more)."); return false; }
+      if (hit < 3) { fb("c4", "no", "<b>Almost.</b> Mention all three: pressure, temperature and depth, and say how each relates to metamorphic intensity."); return false; }
+      fb("c4", "ok", "<b>Complete.</b> Your teacher will read this one. A strong answer says pressure and temperature both rise with depth, that the geothermal gradient sets how fast, and that higher grade means higher P and T."); return true;
+    }
+  };
+  var hints = {
+    a1: "Look at the order of the six index minerals. Which one is last on Barrow's list, and where is the heat source?",
+    b1: "Find kyanite and andalusite on the diagram. Which one is on the high-pressure (lower) side?",
+    b2: "Map B has kyanite and sillimanite. Show the kyanite–sillimanite boundary and read where it starts on the temperature axis.",
+    c1: "Sort each line by pressure (high or low) and temperature (high or low), then match it to a facies description.",
+    c2: "Gray area = very high pressure and very low temperature. Is that a normal geothermal gradient?",
+    c3: "A low geothermal gradient means high pressure at low temperature. Magma raises the gradient locally.",
+  };
+  $$("[data-check]").forEach(function (b) {
+    b.onclick = function () { var id = b.closest("[data-q]").id; markDone(id, checks[id]()); };
+  });
+  $$("[data-hint]").forEach(function (b) {
+    b.onclick = function () { var id = b.closest("[data-q]").id; fb(id, "info", "<b>Hint.</b> " + hints[id]); };
+  });
+  QS.forEach(function (q) { $("#" + q).classList.toggle("done", !!S.done[q]); });
+
+  /* ---------- summary ---------- */
+  function summary() {
+    var L = [];
+    L.push("Lab 7.5 Metamorphic Grades and Facies");
+    L.push("Name: " + (S.who || "") + "   Section: " + (S.sect || "") + "   Date: " + (S.when || ""));
+    L.push("");
+    L.push("A1. Zone of maximum intensity colored: " + (S.zonesOn.join(", ") || "(none)"));
+    L.push("B1. Higher pressure: " + (S.b1 ? "Map " + S.b1 : "(none)") + "\n    Reasoning: " + (S.b1why || ""));
+    L.push("B2. Minimum temperature for Map B: " + (S.b2t ? S.b2t + " °C" : ""));
+    L.push("C1. Facies: " + Object.keys(C1).map(function (k) { return k + " = " + (S.c1[k] || "?"); }).join("; "));
+    L.push("C2. Gray area significance: " + (S.c2t || ""));
+    L.push("C3. Subduction zone: " + [1, 2, 3, 4].map(function (k) { return "star " + k + " = " + (S.c3[k] || "?"); }).join("; "));
+    L.push("C4. Pressure, temperature, depth and intensity: " + (S.c4t || ""));
+    $("#sumText").textContent = L.join("\n");
+  }
+  summary(); progress();
+  $("#copyAll").onclick = function () {
+    var txt = $("#sumText").textContent, m = $("#copyMsg");
+    function sel() { var r = document.createRange(); r.selectNodeContents($("#sumText")); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = "Text selected. Press Ctrl+C or Cmd+C to copy."; }
+    try { navigator.clipboard.writeText(txt).then(function () { m.textContent = "Copied. Paste it into Canvas."; }, sel); } catch (e) { sel(); }
+  };
+
+  /* ---------- nav highlight ---------- */
+  var secs = ["partA", "partB", "partC", "summary"].map(function (id) { return document.getElementById(id); });
+  function navUpdate() {
+    var cur = secs[0].id;
+    secs.forEach(function (s) { if (s.getBoundingClientRect().top < window.innerHeight * 0.4) cur = s.id; });
+    $$(".nav a").forEach(function (a) { a.setAttribute("aria-current", a.dataset.p === cur); });
+  }
+  window.addEventListener("scroll", navUpdate, { passive: true }); navUpdate();
+})();
+</script>
