@@ -29,6 +29,6 @@ Put new or changed content in the sandbox (178045) first. Copy it to the live co
 | Weathering and Erosion | `labs/weathering-erosion/` | https://claude.ai/artifact/9yHMh3Dur8VpWsqpDyUraJ |
 | Lab 8.5 Dating an Outcrop (Ch. 8) | `labs/dating-outcrop-8-5/` | none yet; simulation: https://claude.ai/artifact/P85HPqKgvbEKwV6A4mV9TT |
 
-Lab 8.5 walkthrough link was added to the live Canvas assignment (course 342801, assignment 13998354, section "Walkthrough & Practice" above "How to Submit"). Not tested in the sandbox first, at the teacher's direct request.
+Lab 8.5 walkthrough link was added to the live Canvas assignment (course 342801, assignment 13998354, section "Walkthrough & Practice" above "How to Submit"). Not tested in the sandbox first, at the teacher's direct request. The same section was then added to the sandbox assignment (course 178045, assignment 4520110, an unpublished Kami assignment).
 
 Published simulation: https://claude.ai/artifact/JhEJjtcs4WPcDRfP6qJUPZ
