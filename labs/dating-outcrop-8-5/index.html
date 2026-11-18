@@ -56,6 +56,8 @@ section.step.on{display:block}
 input[type=number],input[type=text],select,textarea{font:16px var(--font-mono);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:9.5em;max-width:100%}
 textarea{width:100%;font:16px var(--font-body);min-height:110px}
 label.f{display:flex;flex-direction:column;gap:2px;font:500 12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.write{margin:0 0 12px;padding:8px 12px;border:1px dashed var(--accent);border-radius:5px;background:var(--soft);font-size:15px}
+.write .wl{display:block;font:500 11px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
 .fb{margin-top:8px;padding:8px 12px;border-radius:5px;font-size:15px;display:none}
 .fb.show{display:block}
 .fb.ok{background:var(--okbg);color:var(--ink);border-left:4px solid var(--ok)}
@@ -173,6 +175,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
       <li><b>Zircon crystals</b> inside the basalt can be dated with U-235 → Pb-207 decay (Figure 8.14).</li>
       <li><b>A fault.</b> The layers on the right are offset from the same layers on the left.</li>
     </ol>
+    <div class="write"><span class="wl">On your lab page · page 227 and 228</span>Your answers go on the lab page, not here. 8.5A questions 1 to 3 are on page 227. 8.5B (numbered list) and 8.5C are on page 228. This site checks your thinking first, so you know what to write.</div>
     <p class="hint">The basalt is interpreted as a <b>sill</b>: magma that squeezed between existing layers and cooled in place. Keep that in mind when you decide what is older and what is younger.</p>
     <div class="nav"><span></span><button class="btn primary" data-go="a1">Begin 8.5A →</button></div>
   </div>
@@ -183,6 +186,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
     <div class="tag">8.5A · Question 1</div>
     <h2>Relative age of the sedimentary rocks</h2>
     <p class="hint">Lab question: What is the relative age of the sedimentary rocks in this rock exposure? Explain your reasoning.</p>
+    <div class="write"><span class="wl">On your lab page · page 227, 8.5A question 1</span>Write the relative age of the sedimentary rocks on the lines under question 1. Then write your reasoning: name the principle and say what had to happen first.</div>
     <p class="q">If the basalt is a sill, are the shale and sandstone older or younger than the basalt?</p>
     <div class="opt" id="a1-age" role="group" aria-label="Sedimentary rock age relative to the basalt">
       <button data-v="older">Older than the sill</button><button data-v="younger">Younger than the sill</button><button data-v="same">Same age</button>
@@ -210,6 +214,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
     <div class="tag">8.5A · Question 2</div>
     <h2>Numerical age of the sill</h2>
     <p>Zircon crystals in the sill have <b>98.9% U-235</b> remaining and <b>1.10% Pb-207</b>. The half-life of U-235 is <b>703.8 million years</b>. The crystals probably formed when the sill cooled, so their age is also the age of the sill.</p>
+    <div class="write"><span class="wl">On your lab page · page 227, 8.5A question 2</span>Write the numerical age of the sill under question 2 and <b>show how you calculated it</b>: the half-lives elapsed, the half-life of U-235, and the multiplication. The lab asks you to use Figure 8.14.</div>
     <div class="grid64" id="g64" aria-label="Decay grid"></div>
     <p class="hint">Each square is a share of the original U-235 atoms. Drag the slider to see how much of a half-life it takes for the daughter product to reach about 1%.</p>
     <div class="row"><label class="f" style="min-width:min(100%,320px)">Half-lives elapsed: <output id="hlOut">0.000</output>
@@ -231,10 +236,12 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
     <div class="tag">8.5A · Question 3</div>
     <h2>Measure the fault displacement</h2>
     <p>Lab question: Locate the fault. Approximately how much separation has occurred along it? Use the scale bar on the photo (0 to 2 m). Click where the <b>basalt meets the shale on the left</b> of the fault zone, then where the <b>basalt meets the shale on the right</b> (both are dashed lines). The page measures the vertical separation for you.</p>
+    <div class="write"><span class="wl">On your lab page · page 227, 8.5A question 3</span>Write the separation in the blank in front of <b>m</b>. Then write what additional information you would want on the lines below it.</div>
     <div class="row"><button class="btn" id="a3-reset">Clear points</button><span class="mono" id="a3-read">Click point 1 on the left side.</span></div>
     <div class="fb" id="a3-fb" role="status"></div>
     <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
     <p class="q">What other data, or a better measuring tool, would improve your measurement? Select all that would help.</p>
+    <p class="hint">Your own answer to this goes on the lines under question 3 on page 227. Use these choices to check your thinking.</p>
     <div class="opt" id="a3-multi" role="group" aria-label="Choices" data-multi="1">
       <button data-v="y">Exact positions of the shale contacts on both sides</button>
       <button data-v="y">Direction of shear scratches (slickenlines) on the fault wall</button>
@@ -253,6 +260,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
     <h2>Order the geologic events</h2>
     <p class="hint">Lab question: Make a numbered list of the geologic events that contributed to this outcrop, starting with deposition of the sandstone and ending with the time the picture was taken. Include the relevant periods and the isotopic age of the sill. Your reasoning and number of events may differ from other students.</p>
     <p>Here, put these events in order from <b>oldest (top)</b> to <b>youngest (bottom)</b> with the arrows. Then write your own full list in your lab manual.</p>
+    <div class="write"><span class="wl">On your lab page · page 228, 8.5B</span>Write your full list on the numbered lines 1 to 8. Line 1 is deposition of the sandstone and the last line is the time the photo was taken. Add the geologic period for each event and the isotopic age of the sill (about 11 Myr). You may have more or fewer than the six events below.</div>
     <ol class="seq" id="seq"></ol>
     <div class="row"><button class="btn primary" id="b-check">Check order</button><button class="btn" id="b-shuf">Shuffle again</button></div>
     <div class="fb" id="b-fb" role="status"></div>
@@ -265,6 +273,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
     <div class="tag">8.5C · Reflect &amp; Discuss</div>
     <h2>Reflect</h2>
     <p class="hint">Lab question: Write a question that you have about the geologic history of this location. What geologic evidence would you need to answer the question?</p>
+    <div class="write"><span class="wl">On your lab page · page 228, 8.5C Reflect &amp; Discuss</span>Write your question, then the geologic evidence you would need to answer it.</div>
     <p>Answers vary. If you need a starting point, try one of these.</p>
     <ul>
       <li>When did the fault last move, and what evidence on the fault wall could show it?</li>
@@ -280,6 +289,7 @@ ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1p
 <section class="step" id="s-p">
   <div class="card">
     <div class="tag">Practice 1 of 3</div>
+    <p class="hint">Practice is not part of the lab page. Use your notebook for scratch work, and show your calculations there.</p>
     <h2>Name the principle</h2>
     <p>Each situation matches one principle or one kind of unconformity. Pick the best fit.</p>
     <div id="sc"></div>
