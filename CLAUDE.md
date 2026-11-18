@@ -27,5 +27,6 @@ Put new or changed content in the sandbox (178045) first. Copy it to the live co
 | Lab | Folder | Handout |
 | --- | --- | --- |
 | Weathering and Erosion | `labs/weathering-erosion/` | https://claude.ai/artifact/9yHMh3Dur8VpWsqpDyUraJ |
+| Lab 8.5 Dating an Outcrop (Ch. 8) | `labs/dating-outcrop-8-5/` | none yet; simulation: https://claude.ai/artifact/P85HPqKgvbEKwV6A4mV9TT |
 
 Published simulation: https://claude.ai/artifact/JhEJjtcs4WPcDRfP6qJUPZ

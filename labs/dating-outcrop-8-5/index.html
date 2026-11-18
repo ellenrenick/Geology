@@ -1,0 +1,503 @@
+<title>Outcrop Dating Lab 8.5</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: sticky step tabs; guided steps each pair an interactive question card with the outcrop figure; practice tab holds three generated drills. Same tokens as the weathering lab. */
+:root{
+  --bg:#f1f4f2; --surface:#ffffff; --ink:#18241f; --muted:#56665f; --line:#d2dad5;
+  --accent:#1c6a72; --accent-ink:#ffffff; --iron:#b2512a; --ochre:#9a7210; --moss:#3f7d3a;
+  --soft:#e7efec; --ok:#2f7a3a; --okbg:#e3f1e4; --bad:#a63a22; --badbg:#f8e6e0;
+  --sky:#dfeaee; --sand:#d9c08a; --shale:#7c7770; --basalt:#2e2f33; --over:#cdb98d;
+  --font-display:'Familjen Grotesk','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Source Sans 3','Segoe UI',Arial,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#17211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3a35;
+  --accent:#55b6c0; --accent-ink:#04201f; --iron:#e58a5c; --ochre:#e3b955; --moss:#79b86f;
+  --soft:#1e2d29; --ok:#7fd08a; --okbg:#1b3022; --bad:#f09a82; --badbg:#3a211b;
+  --sky:#1a2b33; --sand:#a08755; --shale:#5d5a55; --basalt:#0c0d0f; --over:#7d6e4d;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#17211e; --ink:#e3ebe7; --muted:#9aaba3; --line:#2b3a35;
+  --accent:#55b6c0; --accent-ink:#04201f; --iron:#e58a5c; --ochre:#e3b955; --moss:#79b86f;
+  --soft:#1e2d29; --ok:#7fd08a; --okbg:#1b3022; --bad:#f09a82; --badbg:#3a211b;
+  --sky:#1a2b33; --sand:#a08755; --shale:#5d5a55; --basalt:#0c0d0f; --over:#7d6e4d;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--font-body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1000px;margin:0 auto}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:24px;margin-bottom:6px} h3{font-size:18px}
+p{margin:0 0 10px}
+.mono{font-family:var(--font-mono)}
+header.top{padding-block:22px 0}
+.kicker{font:500 12px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;margin-top:4px}
+.sub{color:var(--muted);max-width:68ch;margin:8px 0 0}
+.tabs{display:flex;gap:4px;margin-top:18px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;overflow-x:auto}
+.tabs button{font:600 15px var(--font-display);background:none;border:0;color:var(--muted);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,svg [tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.step{display:none;margin-top:22px}
+section.step.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;min-width:0}
+.card h3{margin-bottom:8px}
+.q{margin:0 0 6px;font-weight:600}
+.hint{color:var(--muted);font-size:14px}
+.tag{font:500 11px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.opt{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.opt button,.btn{font:600 14px var(--font-body);background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:7px 12px;cursor:pointer}
+.opt button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+input[type=number],input[type=text],select,textarea{font:16px var(--font-mono);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:9.5em;max-width:100%}
+textarea{width:100%;font:16px var(--font-body);min-height:110px}
+label.f{display:flex;flex-direction:column;gap:2px;font:500 12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fb{margin-top:8px;padding:8px 12px;border-radius:5px;font-size:15px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--okbg);color:var(--ink);border-left:4px solid var(--ok)}
+.fb.bad{background:var(--badbg);color:var(--ink);border-left:4px solid var(--bad)}
+.fb b{font-family:var(--font-display)}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px;margin-bottom:16px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:13px;color:var(--muted);margin-top:6px}
+.scroll{overflow-x:auto}
+.info{background:var(--soft);border-radius:5px;padding:10px 12px;margin-top:8px;font-size:15px;min-height:3.2em}
+ol.seq{list-style:none;padding:0;margin:8px 0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+ol.seq li{display:flex;gap:8px;align-items:center;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:6px 8px}
+ol.seq li.good{border-color:var(--ok)} ol.seq li.wrong{border-color:var(--bad)}
+ol.seq li .n{font:500 13px var(--font-mono);color:var(--muted);width:2.6em;flex:none}
+ol.seq li .t{flex:1;min-width:0}
+ol.seq li button{font:600 14px var(--font-body);width:34px;height:34px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;cursor:pointer}
+.axis{display:flex;justify-content:space-between;font:500 11px var(--font-mono);color:var(--muted)}
+.sc{border:1px solid var(--line);border-radius:5px;padding:10px 12px;margin-bottom:10px;background:var(--surface)}
+.score{font:500 13px var(--font-mono);color:var(--muted)}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+.eq{font:500 15px var(--font-mono);background:var(--soft);padding:8px 12px;border-radius:5px;display:inline-block;max-width:100%;overflow-x:auto}
+.grid64{display:grid;grid-template-columns:repeat(16,1fr);gap:2px;max-width:420px;margin:8px 0}
+.grid64 i{aspect-ratio:1;border-radius:2px;background:var(--accent)}
+.grid64 i.d{background:var(--iron)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="kicker">Chapter 8 · Dating of Rocks, Fossils, and Geologic Events</div>
+  <h1>Lab 8.5: Infer Geologic History from a New Mexico Outcrop</h1>
+  <p class="sub">Work the lab one question at a time, then use the practice tab to build the same skills on new problems. Your instructor collects the lab manual worksheet; this page is for guided practice and feedback.</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Lab steps">
+  <button role="tab" data-t="outcrop" aria-selected="true">Outcrop</button>
+  <button role="tab" data-t="a1" aria-selected="false">8.5A·1 Relative age</button>
+  <button role="tab" data-t="a2" aria-selected="false">8.5A·2 Numerical age</button>
+  <button role="tab" data-t="a3" aria-selected="false">8.5A·3 Fault</button>
+  <button role="tab" data-t="b" aria-selected="false">8.5B Sequence</button>
+  <button role="tab" data-t="c" aria-selected="false">8.5C Reflect</button>
+  <button role="tab" data-t="p" aria-selected="false">Practice</button>
+</nav>
+
+<!-- Shared outcrop figure is built once and moved into the active step -->
+<div class="fig" id="figbox">
+  <div class="scroll"><svg id="outcrop" viewBox="0 0 800 380" role="img" aria-label="Schematic cross-section of a New Mexico outcrop: sandstone at the base, shale above it, a dark basalt sill above the shale, and a fault that drops the right side about 2 meters. Rocks above the sill on the right side are younger sedimentary rock.">
+    <defs>
+      <clipPath id="cL"><polygon points="0,0 440,0 380,380 0,380"/></clipPath>
+      <clipPath id="cR"><polygon points="440,0 800,0 800,380 380,380"/></clipPath>
+      <g id="leaf"><path d="M0,0 C6,-5 14,-5 18,0 C14,5 6,5 0,0 Z M18,0 L23,0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></g>
+    </defs>
+    <rect width="800" height="380" fill="var(--sky)"/>
+    <!-- LEFT BLOCK -->
+    <g clip-path="url(#cL)">
+      <rect class="lyr" data-id="sand" x="0" y="200" width="440" height="180" fill="var(--sand)" tabindex="0" role="button" aria-label="Sandstone"/>
+      <rect class="lyr" data-id="shale" x="0" y="140" width="440" height="60" fill="var(--shale)" tabindex="0" role="button" aria-label="Shale"/>
+      <path class="lyr" data-id="sill" d="M0,104 L440,98 L440,140 L0,140 Z" fill="var(--basalt)" tabindex="0" role="button" aria-label="Basalt sill"/>
+      <g color="#33362f"><use href="#leaf" x="40" y="165"/><use href="#leaf" x="150" y="175" transform="rotate(-14 150 175)"/><use href="#leaf" x="270" y="160"/>
+      <use href="#leaf" x="80" y="260"/><use href="#leaf" x="210" y="300" transform="rotate(10 210 300)"/></g>
+      <circle class="lyr" data-id="zircon" cx="210" cy="121" r="7" fill="#e7d27a" stroke="#fff" stroke-width="1.5" tabindex="0" role="button" aria-label="Zircon sample location"/>
+    </g>
+    <!-- RIGHT BLOCK (dropped 2 m = 80 px) -->
+    <g clip-path="url(#cR)">
+      <rect class="lyr" data-id="over" x="340" y="108" width="460" height="77" fill="var(--over)" tabindex="0" role="button" aria-label="Sedimentary rock above the sill"/>
+      <path class="lyr" data-id="sill" d="M340,178 L800,184 L800,220 L340,220 Z" fill="var(--basalt)" tabindex="0" role="button" aria-label="Basalt sill"/>
+      <rect class="lyr" data-id="shale" x="340" y="220" width="460" height="60" fill="var(--shale)" tabindex="0" role="button" aria-label="Shale"/>
+      <rect class="lyr" data-id="sand" x="340" y="280" width="460" height="100" fill="var(--sand)" tabindex="0" role="button" aria-label="Sandstone"/>
+      <g color="#33362f"><use href="#leaf" x="520" y="245"/><use href="#leaf" x="640" y="255" transform="rotate(-10 640 255)"/><use href="#leaf" x="720" y="240"/><use href="#leaf" x="560" y="330"/><use href="#leaf" x="690" y="320" transform="rotate(8 690 320)"/></g>
+    </g>
+    <!-- ground surface and fault -->
+    <path d="M0,104 L440,98 L440,108 L800,108" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity=".55"/>
+    <line x1="440" y1="98" x2="380" y2="380" stroke="var(--iron)" stroke-width="3" stroke-dasharray="9 5"/>
+    <text x="452" y="72" font-size="14" fill="var(--ink)" font-family="IBM Plex Mono, monospace">fault</text>
+    <line x1="448" y1="76" x2="440" y2="98" stroke="var(--ink)" stroke-width="1.2"/>
+    <!-- labels -->
+    <g font-family="IBM Plex Mono, monospace" font-size="13" fill="#fff" style="paint-order:stroke" stroke="rgba(0,0,0,.55)" stroke-width="3">
+      <text x="14" y="128">basalt</text><text x="14" y="176">shale</text><text x="14" y="236">sandstone</text>
+      <text x="458" y="150">sedimentary rock</text><text x="458" y="206">basalt</text><text x="458" y="258">shale</text><text x="458" y="318">sandstone</text>
+    </g>
+    <!-- scale bar: 40 px = 1 m -->
+    <g id="scalebar" transform="translate(718,352)">
+      <rect x="-6" y="-14" width="86" height="26" rx="3" fill="var(--surface)" opacity=".92"/>
+      <line x1="0" y1="0" x2="40" y2="0" stroke="var(--ink)" stroke-width="3"/><line x1="0" y1="-5" x2="0" y2="5" stroke="var(--ink)" stroke-width="2"/><line x1="40" y1="-5" x2="40" y2="5" stroke="var(--ink)" stroke-width="2"/>
+      <text x="48" y="4" font-size="12" fill="var(--ink)" font-family="IBM Plex Mono, monospace">1 m</text>
+    </g>
+    <g id="marks"></g>
+  </svg></div>
+  <div class="cap">Schematic redrawn from the lab description for practice. It is not the photograph in your lab manual. Select a rock layer, the fossil leaves, or the yellow zircon sample to read about it.</div>
+  <div class="info" id="info" aria-live="polite">Tap or click a layer to see what it is and what it tells you.</div>
+</div>
+
+<section class="step on" id="s-outcrop">
+  <div class="card">
+    <div class="tag">Start here</div>
+    <h2>Read the outcrop</h2>
+    <p>This outcrop has four kinds of evidence. Look at each one in the figure above before you answer any questions.</p>
+    <ol>
+      <li><b>Layers.</b> Sandstone at the bottom, shale above it, then a dark basalt body, with younger sedimentary rock above the basalt on the right.</li>
+      <li><b>Fossils.</b> <i>Fagopsis</i> leaf fossils are present in the shale and sandstone. Leaf fossils like these are not index fossils for a single moment, but their time range is on Figure 8.13 in your lab manual.</li>
+      <li><b>Zircon crystals</b> inside the basalt can be dated with U-235 → Pb-207 decay (Figure 8.14).</li>
+      <li><b>A fault.</b> The layers on the right are offset from the same layers on the left.</li>
+    </ol>
+    <p class="hint">The basalt is interpreted as a <b>sill</b>: magma that squeezed between existing layers and cooled in place. Keep that in mind when you decide what is older and what is younger.</p>
+    <div class="nav"><span></span><button class="btn primary" data-go="a1">Begin 8.5A →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-a1">
+  <div class="card">
+    <div class="tag">8.5A · Question 1</div>
+    <h2>Relative age of the basalt</h2>
+    <p class="q">If the basalt is part of a sill, is it older or younger than the shale and sandstone below it?</p>
+    <div class="opt" id="a1-age" role="group" aria-label="Basalt age relative to shale and sandstone">
+      <button data-v="older">Older</button><button data-v="younger">Younger</button><button data-v="same">Same age</button>
+    </div>
+    <p class="q" style="margin-top:12px">Which principle supports your answer?</p>
+    <div class="opt" id="a1-pr" role="group" aria-label="Principle">
+      <button data-v="super">Superposition</button><button data-v="horiz">Original horizontality</button>
+      <button data-v="cross">Cross-cutting relationships</button><button data-v="incl">Inclusion</button>
+    </div>
+    <p class="q" style="margin-top:12px">The <i>Fagopsis</i> leaf fossils are in the shale and sandstone. Enter the age range for these rocks in millions of years ago (Figure 8.13: mid to upper Paleogene).</p>
+    <div class="row">
+      <label class="f">Older limit (Myr)<input type="number" id="a1-lo" inputmode="decimal"></label>
+      <label class="f">Younger limit (Myr)<input type="number" id="a1-hi" inputmode="decimal"></label>
+    </div>
+    <div class="row"><button class="btn primary" id="a1-check">Check answers</button></div>
+    <div class="fb" id="a1-fb" role="status"></div>
+    <div class="nav"><button class="btn" data-go="outcrop">← Outcrop</button><button class="btn primary" data-go="a2">Next: 8.5A·2 →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-a2">
+  <div class="card">
+    <div class="tag">8.5A · Question 2</div>
+    <h2>Numerical age of the sill</h2>
+    <p>Zircon crystals in the sill have <b>98.9% U-235</b> remaining and <b>1.10% Pb-207</b>. The half-life of U-235 is <b>703.8 million years</b>. The crystals probably formed when the sill cooled, so their age is also the age of the sill.</p>
+    <div class="grid64" id="g64" aria-label="Decay grid"></div>
+    <p class="hint">Each square is a share of the original U-235 atoms. Drag the slider to see how much of a half-life it takes for the daughter product to reach about 1%.</p>
+    <div class="row"><label class="f" style="min-width:min(100%,320px)">Half-lives elapsed: <output id="hlOut">0.000</output>
+      <input type="range" id="hl" min="0" max="1" step="0.001" value="0" aria-label="Half-lives elapsed"></label>
+      <span class="mono" id="hlPct"></span></div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <p class="q">Step 1. What fraction of one half-life has elapsed? Figure 8.14C gives the value as 1/64. Enter it as a decimal.</p>
+    <div class="row"><label class="f">Half-lives<input type="number" id="a2-hl" step="any" inputmode="decimal"></label></div>
+    <p class="q">Step 2. Multiply by the half-life to get the age of the sill, in millions of years.</p>
+    <div class="row"><label class="f">Age (Myr)<input type="number" id="a2-age" step="any" inputmode="decimal"></label>
+      <button class="btn primary" id="a2-check">Check answers</button></div>
+    <div class="fb" id="a2-fb" role="status"></div>
+    <div class="nav"><button class="btn" data-go="a1">← 8.5A·1</button><button class="btn primary" data-go="a3">Next: 8.5A·3 →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-a3">
+  <div class="card">
+    <div class="tag">8.5A · Question 3</div>
+    <h2>Measure the fault displacement</h2>
+    <p>Use the scale bar (1 m) to measure how far the layers have been offset. Click the <b>top of the shale on the left side</b> of the fault, then click the <b>top of the shale on the right side</b>. The page measures the vertical separation for you.</p>
+    <div class="row"><button class="btn" id="a3-reset">Clear points</button><span class="mono" id="a3-read">Click point 1 on the left side.</span></div>
+    <div class="fb" id="a3-fb" role="status"></div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <p class="q">What other data, or a better measuring tool, would improve your measurement? Select all that would help.</p>
+    <div class="opt" id="a3-multi" role="group" aria-label="Choices" data-multi="1">
+      <button data-v="y">Exact positions of the shale contacts on both sides</button>
+      <button data-v="y">Direction of shear scratches (slickenlines) on the fault wall</button>
+      <button data-v="n">A larger photograph of only the sill</button>
+      <button data-v="n">The age of the leaf fossils</button>
+    </div>
+    <div class="row"><button class="btn primary" id="a3-check2">Check</button></div>
+    <div class="fb" id="a3-fb2" role="status"></div>
+    <div class="nav"><button class="btn" data-go="a2">← 8.5A·2</button><button class="btn primary" data-go="b">Next: 8.5B →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-b">
+  <div class="card">
+    <div class="tag">8.5B</div>
+    <h2>Order the geologic events</h2>
+    <p>Put the events in order from <b>oldest (top)</b> to <b>youngest (bottom)</b>. Use the arrows to move an event.</p>
+    <ol class="seq" id="seq"></ol>
+    <div class="row"><button class="btn primary" id="b-check">Check order</button><button class="btn" id="b-shuf">Shuffle again</button></div>
+    <div class="fb" id="b-fb" role="status"></div>
+    <div class="nav"><button class="btn" data-go="a3">← 8.5A·3</button><button class="btn primary" data-go="c">Next: 8.5C →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-c">
+  <div class="card">
+    <div class="tag">8.5C · Reflect &amp; Discuss</div>
+    <h2>Reflect</h2>
+    <p>Answers to this question vary. Use the prompts below as a starting point and write your response in your lab notebook. Nothing typed here is saved or collected.</p>
+    <ul>
+      <li>Which of the events you ordered are you most confident about, and which principle supports it?</li>
+      <li>The age of the sill is a number. Which events can you bracket with that number, and which have no numerical age?</li>
+      <li>The fault cuts the sill. What does that tell you about when the faulting occurred, and what can you not say about the <i>most recent</i> movement?</li>
+      <li>What additional data would reduce your uncertainty about this history?</li>
+    </ul>
+    <label class="f" for="c-notes">Draft space (not saved)</label>
+    <textarea id="c-notes" placeholder="Type your draft here."></textarea>
+    <div class="nav"><button class="btn" data-go="b">← 8.5B</button><button class="btn primary" data-go="p">Practice the skills →</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-p">
+  <div class="card">
+    <div class="tag">Practice 1 of 3</div>
+    <h2>Name the principle</h2>
+    <p>Each situation matches one principle or one kind of unconformity. Pick the best fit.</p>
+    <div id="sc"></div>
+    <div class="score" id="sc-score"></div>
+  </div>
+  <div class="card">
+    <div class="tag">Practice 2 of 3</div>
+    <h2>Radiometric age calculator</h2>
+    <p>Each problem gives the percent of the parent isotope that remains. Find the number of half-lives, then the age.</p>
+    <div class="eq">half-lives = log₂(100 ÷ % parent remaining) &nbsp; age = half-lives × half-life</div>
+    <div id="dc" style="margin-top:10px"></div>
+    <div class="row"><button class="btn" id="dc-new">New problem</button><span class="score" id="dc-score"></span></div>
+  </div>
+  <div class="card">
+    <div class="tag">Practice 3 of 3</div>
+    <h2>Index fossil overlap</h2>
+    <p>A rock contains both fossils shown. Time only counts where both fossils lived at once. Read the range chart and give the age range of the rock.</p>
+    <div id="fo"></div>
+    <div class="row"><button class="btn" id="fo-new">New problem</button><span class="score" id="fo-score"></span></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var NS='http://www.w3.org/2000/svg';
+  function fb(id,ok,html){var e=$(id);e.className='fb show '+(ok?'ok':'bad');e.innerHTML=html}
+  function near(v,lo,hi){return typeof v==='number'&&!isNaN(v)&&v>=lo&&v<=hi}
+  function num(id){var v=$(id).value;return v===''?NaN:parseFloat(v)}
+
+  /* ---- Tabs + figure placement ---- */
+  var steps=['outcrop','a1','a2','a3','b','c','p'];
+  function show(t){
+    if(steps.indexOf(t)<0)t='outcrop';
+    $$('.tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
+    $$('section.step').forEach(function(s){s.classList.toggle('on',s.id==='s-'+t)});
+    var fig=$('#figbox');
+    fig.hidden=(t==='p'||t==='c'||t==='b'&&false);
+    if(t==='p')fig.hidden=true;
+    $('#s-'+t).parentNode.insertBefore(fig,$('#s-'+t));
+    try{history.replaceState(null,'','#'+t)}catch(e){location.hash=t}
+    if(t==='a3'){resetMeasure()}
+  }
+  $$('.tabs button').forEach(function(b){b.onclick=function(){show(b.dataset.t);window.scrollTo(0,0)}});
+  $$('[data-go]').forEach(function(b){b.onclick=function(){show(b.dataset.go);window.scrollTo(0,0)}});
+
+  /* ---- Outcrop info ---- */
+  var INFO={
+    sand:'<b>Sandstone.</b> The lowest unit shown. Sediment was deposited as flat layers (original horizontality), and it contains <i>Fagopsis</i> leaf fossils.',
+    shale:'<b>Shale.</b> Mud deposited on top of the sandstone (superposition). It also contains <i>Fagopsis</i> leaves, which place it in the mid to upper Paleogene.',
+    sill:'<b>Basalt sill.</b> A sill is intruded <i>into</i> existing rock, so it is younger than the shale and sandstone it cuts across or sits between. The fault cuts it, so the fault is younger still.',
+    over:'<b>Sedimentary rock above the sill.</b> Rock that was deposited, buried the area, and was later eroded away on the left side. It shows the sill was once covered.',
+    zircon:'<b>Zircon sample.</b> Crystals that grew as the magma cooled. They hold U-235 and its daughter Pb-207, so they give a numerical age for the sill (Question 2).'
+  };
+  $$('.lyr').forEach(function(el){
+    function go(){$('#info').innerHTML=INFO[el.dataset.id]}
+    el.addEventListener('click',go);
+    el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+
+  /* ---- 8.5A.1 ---- */
+  function single(g){var cur=null;$$('button',g).forEach(function(b){b.onclick=function(){
+    $$('button',g).forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');}});}
+  single($('#a1-age'));single($('#a1-pr'));
+  function pressed(g){var b=$('button[aria-pressed="true"]',g);return b?b.dataset.v:null}
+  $('#a1-check').onclick=function(){
+    var age=pressed($('#a1-age')),pr=pressed($('#a1-pr')),lo=num('#a1-lo'),hi=num('#a1-hi');
+    var m=[],ok=true;
+    if(age==='younger'&&pr==='cross')m.push('✔ <b>Younger, by cross-cutting relationships.</b> A sill intrudes existing rock, so the rock had to be there first. The shale is older than the sill and younger than the sandstone.');
+    else if(age==='younger'){ok=false;m.push('✘ You have the right age relationship (younger), but a different principle fits better. The magma <i>cut into</i> rock that already existed.')}
+    else if(!age){ok=false;m.push('✘ Choose older or younger.')}
+    else {ok=false;m.push('✘ The sill is <b>younger</b> than the rock it intrudes. Think about which had to exist first.')}
+    if(isNaN(lo)||isNaN(hi)){ok=false;m.push('✘ Enter both limits for the fossil age range.')}
+    else{var a=Math.max(lo,hi),b=Math.min(lo,hi);
+      if(near(a,40,50)&&near(b,20,26))m.push('✔ About 45 to 23 Myr is the mid to upper Paleogene range for <i>Fagopsis</i>.');
+      else{ok=false;m.push('✘ Check the <i>Fagopsis</i> range line on Figure 8.13. The expected range is about <b>45 to 23 Myr</b>. Larger numbers are older.')}}
+    fb('#a1-fb',ok,m.join('<br>'));
+  };
+
+  /* ---- 8.5A.2 ---- */
+  var HALF=703.8, g64=$('#g64');
+  for(var i=0;i<256;i++){g64.appendChild(document.createElement('i'))}
+  function drawDecay(){
+    var t=parseFloat($('#hl').value),P=Math.pow(0.5,t),dec=Math.round((1-P)*256);
+    $$('i',g64).forEach(function(c,i){c.className=i<dec?'d':''});
+    $('#hlOut').textContent=t.toFixed(3);
+    $('#hlPct').textContent=(P*100).toFixed(1)+'% U-235 left · '+((1-P)*100).toFixed(1)+'% Pb-207 · '+(t*HALF).toFixed(1)+' Myr';
+  }
+  $('#hl').oninput=drawDecay;drawDecay();
+  $('#a2-check').onclick=function(){
+    var h=num('#a2-hl'),a=num('#a2-age'),m=[],ok=true;
+    if(near(h,0.0155,0.0165))m.push('✔ 1/64 = 0.0156, which rounds to 0.016 half-lives.');
+    else{ok=false;m.push('✘ Step 1: 1 ÷ 64 ≈ 0.016.')}
+    if(near(a,10.8,11.5))m.push('✔ 0.016 × 703.8 Myr ≈ <b>11 Myr</b> (11.26 with the rounded value, 10.99 with 1/64 exactly). The sill is Neogene in age, which is younger than the Paleogene rocks it intrudes. That agrees with Question 1.');
+    else{ok=false;m.push('✘ Step 2: multiply half-lives by 703.8 Myr. Your age should be near 11 Myr.')}
+    if(ok)m.push('<span class="hint">Rounding note: 1/64 is exactly 0.015625, and the calculation from 98.9% gives about 0.0160. Rounding early changes the answer by a few percent, so keep extra digits until the final step.</span>');
+    fb('#a2-fb',ok,m.join('<br>'));
+  };
+
+  /* ---- 8.5A.3 measure ---- */
+  var pts=[],PXM=40,marks=$('#marks');
+  function resetMeasure(){pts=[];marks.innerHTML='';$('#a3-read').textContent='Click point 1 on the left side.';$('#a3-fb').className='fb'}
+  $('#a3-reset').onclick=resetMeasure;
+  function svgPt(e){var s=$('#outcrop'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(s.getScreenCTM().inverse())}
+  $('#outcrop').addEventListener('click',function(e){
+    if(!$('#s-a3').classList.contains('on'))return;
+    if(e.target.classList&&e.target.classList.contains('lyr')&&false)return;
+    if(pts.length>=2)resetMeasure();
+    var p=svgPt(e);pts.push(p);
+    var c=document.createElementNS(NS,'circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',6);c.setAttribute('fill','var(--iron)');c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','2');marks.appendChild(c);
+    if(pts.length===1){$('#a3-read').textContent='Now click point 2 on the right side.';return}
+    var l=document.createElementNS(NS,'line');l.setAttribute('x1',pts[0].x);l.setAttribute('y1',pts[0].y);l.setAttribute('x2',pts[0].x);l.setAttribute('y2',pts[1].y);l.setAttribute('stroke','var(--iron)');l.setAttribute('stroke-width','2.5');marks.appendChild(l);
+    var d=Math.abs(pts[1].y-pts[0].y)/PXM;
+    $('#a3-read').textContent='Vertical separation ≈ '+d.toFixed(1)+' m';
+    var ok=near(d,1.6,2.4);
+    fb('#a3-fb',ok,ok?'✔ About 2 m of displacement. This is the vertical separation of the shale, not the true slip, because the direction the fault moved is not known.':
+      '✘ '+d.toFixed(1)+' m is off. Click exactly on the top of the shale (the boundary with the basalt) on each side. The expected answer is about <b>2 m</b>.');
+  });
+  single($('#a3-multi'));
+  (function(){var g=$('#a3-multi');$$('button',g).forEach(function(b){b.onclick=function(){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')==='true'?'false':'true')}})})();
+  $('#a3-check2').onclick=function(){
+    var bs=$$('#a3-multi button'),ok=bs.every(function(b){return (b.getAttribute('aria-pressed')==='true')===(b.dataset.v==='y')});
+    fb('#a3-fb2',ok,ok?'✔ Exact contact positions let you measure the separation more accurately. Shear scratches show which way one side moved, so you can find the net slip.':'✘ Think about what limits this measurement: where the contacts are, and which way the blocks moved. Fossil ages and a close-up of the sill do not help measure offset.');
+  };
+
+  /* ---- 8.5B sequence ---- */
+  var EV=[
+    'Sand was deposited with <i>Fagopsis</i> leaves (Paleogene).',
+    'Mud was deposited on top of the sand, also with <i>Fagopsis</i> leaves (Paleogene).',
+    'More sediment was deposited on top and the sand and mud were lithified into sandstone and shale.',
+    'The sill intruded between layers of sedimentary rock above the shale (Neogene, about 11 Myr ago).',
+    'About 2 m of fault displacement occurred after the sill was emplaced.',
+    'Erosion removed the rocks above the sill to make the present landscape.'
+  ];
+  var order=[];
+  function shuffle(){do{order=EV.map(function(_,i){return i}).sort(function(){return Math.random()-.5})}while(order.every(function(v,i){return v===i}));renderSeq()}
+  function renderSeq(){
+    var ol=$('#seq');ol.innerHTML='';
+    order.forEach(function(ix,pos){
+      var li=document.createElement('li');
+      li.innerHTML='<span class="n">'+(pos===0?'oldest':pos===order.length-1?'young.':'')+'</span><span class="t">'+EV[ix]+'</span>';
+      [['↑',-1,'Move up'],['↓',1,'Move down']].forEach(function(a){
+        var b=document.createElement('button');b.textContent=a[0];b.setAttribute('aria-label',a[2]+': '+EV[ix].replace(/<[^>]+>/g,''));
+        b.disabled=(pos+a[1]<0||pos+a[1]>=order.length);
+        b.onclick=function(){var t=order[pos];order[pos]=order[pos+a[1]];order[pos+a[1]]=t;$('#b-fb').className='fb';renderSeq()};
+        li.appendChild(b)});
+      ol.appendChild(li);
+    });
+  }
+  $('#b-shuf').onclick=function(){$('#b-fb').className='fb';shuffle()};
+  $('#b-check').onclick=function(){
+    var lis=$$('#seq li'),right=0;
+    order.forEach(function(ix,pos){var g=ix===pos;if(g)right++;lis[pos].className=g?'good':'wrong'});
+    if(right===6)fb('#b-fb',true,'✔ <b>All six in order.</b> Deposition (superposition) comes first. The sill cuts those layers, so it is younger. The fault cuts the sill, so it is younger still. Erosion of the rocks above the sill is the most recent step. The most recent fault movement is not known, so this is a reasonable but not the only list.');
+    else fb('#b-fb',false,'✘ '+right+' of 6 are in the right place (green outlines). Ask for each event: what had to exist before it could happen? Hint: the fault cuts the sill, and the sill cuts the sedimentary layers.');
+  };
+  shuffle();
+
+  /* ---- Practice 1: scenarios ---- */
+  var SC=[
+    ['A red ancient soil lies at the bottom of a road cut, with lava and then gravel above it. Which layer is oldest?','super',['super','horiz','cross','incl'],'Superposition: in undisturbed layers the lowest one formed first.'],
+    ['Cracks run through a lava flow but stop at its top surface, where a newer soil begins. What can you say about the cracks?','cross',['super','horiz','cross','incl'],'Cross-cutting: the cracks cut the lava, so the lava had to exist first.'],
+    ['Pieces of lava rock are found inside the soil layer above the lava flow. Which is older, the lava or the soil?','incl',['super','horiz','cross','incl'],'Inclusion: the lava clasts were in the soil, so the lava is older than the soil.'],
+    ['A sandstone is found in perfectly flat beds on a beach. Why is the layering expected to start nearly horizontal?','horiz',['super','horiz','cross','incl'],'Original horizontality: sediment settles out in flat layers under gravity.'],
+    ['Red sandstone beds are folded and tilted. A flat, yellow conglomerate lies on their eroded top. What is the contact?','ang',['ang','non','dis','super'],'Angular unconformity: younger flat layers lie on tilted, eroded older layers.'],
+    ['Flat sedimentary strata in the Grand Canyon lie directly on top of eroded metamorphic rock. What is the contact?','non',['ang','non','dis','super'],'Nonconformity: sedimentary rock on top of eroded igneous or metamorphic rock.'],
+    ['Two sets of parallel sedimentary layers are separated by an erosion surface, but the layers above and below are parallel to each other. What is the contact?','dis',['ang','non','dis','cross'],'Disconformity: a gap in the record between parallel layers.'],
+    ['A granite body cuts across several layers of sandstone. Which is older?','cross',['super','horiz','cross','incl'],'Cross-cutting: the granite intruded the sandstone, so the sandstone is older.']
+  ];
+  var LABEL={super:'Superposition',horiz:'Original horizontality',cross:'Cross-cutting',incl:'Inclusion',ang:'Angular unconformity',non:'Nonconformity',dis:'Disconformity'};
+  var scBox=$('#sc'),scDone=0,scRight=0;
+  SC.forEach(function(s,i){
+    var d=document.createElement('div');d.className='sc';
+    d.innerHTML='<p class="q">'+(i+1)+'. '+s[0]+'</p><div class="opt"></div><div class="fb"></div>';
+    var o=$('.opt',d),done=false;
+    s[2].forEach(function(k){var b=document.createElement('button');b.textContent=LABEL[k];b.onclick=function(){
+      if(done)return;done=true;scDone++;var ok=k===s[1];if(ok)scRight++;
+      var f=$('.fb',d);f.className='fb show '+(ok?'ok':'bad');f.innerHTML=(ok?'✔ ':'✘ Not quite. ')+s[3];
+      $$('button',o).forEach(function(x){x.disabled=true;if(x.textContent===LABEL[s[1]])x.setAttribute('aria-pressed','true')});
+      $('#sc-score').textContent=scRight+' correct of '+scDone+' answered';};o.appendChild(b)});
+    scBox.appendChild(d);
+  });
+
+  /* ---- Practice 2: decay ---- */
+  var ISO=[['U-238 → Pb-206',4468,'Myr'],['U-235 → Pb-207',703.8,'Myr'],['K-40 → Ar-40',1250,'Myr'],['Rb-87 → Sr-87',48800,'Myr'],['C-14 → N-14',5730,'yr']];
+  var PCT=[50,25,12.5,6.25,87.5,70,60,35,98.9,93.5,15];
+  var dcTries=0,dcRight=0,cur;
+  function dcNew(){
+    var iso=ISO[Math.floor(Math.random()*ISO.length)],p=PCT[Math.floor(Math.random()*PCT.length)];
+    if(iso[0].indexOf('C-14')===0&&p>95)p=50;
+    var h=Math.log(100/p)/Math.log(2);cur={iso:iso,p:p,h:h,age:h*iso[1]};
+    $('#dc').innerHTML='<p class="q">A sample has <b>'+p+'%</b> of its parent isotope <b>'+iso[0].split(' ')[0]+'</b> remaining. The half-life is <b>'+iso[1].toLocaleString()+' '+iso[2]+'</b>.</p>'+
+      '<div class="row"><label class="f" for="dc-h">Half-lives<input type="number" id="dc-h" step="any"></label><label class="f" for="dc-a">Age ('+iso[2]+')<input type="number" id="dc-a" step="any"></label><button class="btn primary" id="dc-go">Check</button></div><div class="fb" id="dc-fb" role="status"></div>';
+    $('#dc-go').onclick=function(){
+      var h=num('#dc-h'),a=num('#dc-a');
+      if(isNaN(h)||isNaN(a)){fb('#dc-fb',false,'✘ Enter both values.');return}
+      dcTries++;var okH=Math.abs(h-cur.h)<=Math.max(0.02,cur.h*0.03),okA=Math.abs(a-cur.age)<=cur.age*0.03+0.01;
+      if(okH&&okA){dcRight++;fb('#dc-fb',true,'✔ '+cur.h.toFixed(3)+' half-lives × '+cur.iso[1].toLocaleString()+' = <b>'+cur.age.toLocaleString(undefined,{maximumFractionDigits:cur.age<100?2:0})+' '+cur.iso[2]+'</b>.')}
+      else fb('#dc-fb',false,'✘ Half-lives = log₂(100 ÷ '+cur.p+') = '+cur.h.toFixed(3)+'. Age = '+cur.h.toFixed(3)+' × '+cur.iso[1].toLocaleString()+' = <b>'+cur.age.toLocaleString(undefined,{maximumFractionDigits:cur.age<100?2:0})+' '+cur.iso[2]+'</b>. Values within 3% count as correct.');
+      $('#dc-score').textContent=dcRight+' correct of '+dcTries+' tried';
+    };
+  }
+  $('#dc-new').onclick=dcNew;dcNew();
+
+  /* ---- Practice 3: index fossil overlap ---- */
+  var FOS=['Phacops','Mucrospirifer','Strophomena','Flexicalymene','Exogyra','Baculites','Olenellus','Cruziana-like trace'];
+  var NAMES=['Fossil A','Fossil B'],foTries=0,foRight=0,fcur;
+  function foNew(){
+    var s1=300+Math.floor(Math.random()*200),e1=s1-(80+Math.floor(Math.random()*8)*10);
+    var s2=e1+30+Math.floor(Math.random()*5)*10; // overlaps
+    var e2=s2-(70+Math.floor(Math.random()*8)*10);
+    // ensure overlap exists: A: s1..e1 ; B: s2..e2 with s2>e1 and e2<s1
+    var ovO=Math.min(s1,s2),ovY=Math.max(e1,e2);
+    if(ovO<=ovY){s2=e1+40;e2=s1-40-100;ovO=Math.min(s1,s2);ovY=Math.max(e1,e2)}
+    fcur={a:[s1,e1],b:[s2,e2],o:ovO,y:ovY};
+    var max=Math.max(s1,s2)+20,min=Math.max(0,Math.min(e1,e2)-20),W=700,H=130,L=60,R=20,x=function(m){return L+(max-m)/(max-min)*(W-L-R)};
+    var svg='<div class="scroll"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Range chart: Fossil A lived from '+s1+' to '+e1+' million years ago; Fossil B from '+s2+' to '+e2+'." style="min-width:520px;width:100%;height:auto">';
+    [[0,fcur.a,'var(--accent)'],[1,fcur.b,'var(--iron)']].forEach(function(r){
+      var y=26+r[0]*44;svg+='<text x="4" y="'+(y+5)+'" font-size="13" fill="var(--ink)" font-family="IBM Plex Mono, monospace">'+NAMES[r[0]]+'</text><rect x="'+x(r[1][0])+'" y="'+(y-9)+'" width="'+(x(r[1][1])-x(r[1][0]))+'" height="18" rx="3" fill="'+r[2]+'"/>';
+      svg+='<text x="'+x(r[1][0])+'" y="'+(y-14)+'" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace" text-anchor="middle">'+r[1][0]+'</text><text x="'+x(r[1][1])+'" y="'+(y-14)+'" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace" text-anchor="middle">'+r[1][1]+'</text>';});
+    var step=50,t0=Math.ceil(min/step)*step;
+    svg+='<line x1="'+L+'" y1="112" x2="'+(W-R)+'" y2="112" stroke="var(--line)"/>';
+    for(var t=t0;t<=max;t+=step){svg+='<line x1="'+x(t)+'" y1="108" x2="'+x(t)+'" y2="116" stroke="var(--muted)"/><text x="'+x(t)+'" y="128" font-size="11" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace">'+t+'</text>'}
+    svg+='</svg></div><div class="axis"><span>older (Myr ago) ←</span><span>→ younger</span></div>';
+    $('#fo').innerHTML=svg+'<p class="q" style="margin-top:8px">Rock age range, in millions of years ago:</p><div class="row"><label class="f" for="fo-o">Older limit<input type="number" id="fo-o"></label><label class="f" for="fo-y">Younger limit<input type="number" id="fo-y"></label><button class="btn primary" id="fo-go">Check</button></div><div class="fb" id="fo-fb" role="status"></div>';
+    $('#fo-go').onclick=function(){
+      var o=num('#fo-o'),y=num('#fo-y');if(isNaN(o)||isNaN(y)){fb('#fo-fb',false,'✘ Enter both limits.');return}
+      foTries++;var hi=Math.max(o,y),lo=Math.min(o,y),ok=Math.abs(hi-fcur.o)<=5&&Math.abs(lo-fcur.y)<=5;
+      if(ok)foRight++;
+      fb('#fo-fb',ok,(ok?'✔ ':'✘ ')+'Both fossils lived together from <b>'+fcur.o+'</b> to <b>'+fcur.y+'</b> Myr ago. Take the <i>younger</i> of the two first appearances and the <i>older</i> of the two last appearances. Answers within 5 Myr count.');
+      $('#fo-score').textContent=foRight+' correct of '+foTries+' tried';
+    };
+  }
+  $('#fo-new').onclick=foNew;foNew();
+
+  show((location.hash||'').replace('#',''));
+})();
+</script>
